@@ -1089,7 +1089,10 @@ $('profileForm').addEventListener('submit', e => {
 });
 document.querySelectorAll('[data-demo]').forEach(b => b.onclick = () => startSession({ ...DEMO_USERS[b.dataset.demo], demoId: b.dataset.demo }));
 $('profileBack').onclick = () => { showOverlay('authOverlay'); if (fbUser && fbm) fbm.signOut(fbAuth); };
-$('authOffline').onclick = () => showProfile(null);
+const demoBtn = $('authOneClickDemo');
+if (demoBtn) demoBtn.onclick = () => startSession({ ...DEMO_USERS.ramesh, demoId: 'ramesh' });
+const offBtn = $('authOffline');
+if (offBtn) offBtn.onclick = () => startSession({ ...DEMO_USERS.ramesh, demoId: 'ramesh' });
 $('logoutBtn').onclick = () => { signOutLocal(); if (fbAuth && fbm) fbm.signOut(fbAuth).catch(() => {}); };
 
 document.addEventListener('click', e => {
