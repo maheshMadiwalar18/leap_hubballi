@@ -1348,16 +1348,17 @@ function yardHtml() {
     <div class="yard-wrapper">
       <div class="yard-header-banner">
         <div class="yhb-left">
-          <span class="yhb-tag">🏢 APMC AMARGOL · LIVE YARD CONTROL</span>
+          <span class="yhb-tag">APMC AMARGOL · LIVE YARD DISPATCH CONTROL</span>
           <h1>ಅಮರಗೋಳ ಎಪಿಎಂಸಿ ಯಾರ್ಡ್ — ಲೈವ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</h1>
           <p class="yhb-sub">
-            ಕರ್ನಾಟಕದ ಅತಿ ದೊಡ್ಡ ಸಗಟು ಮಾರುಕಟ್ಟೆ ಯಾರ್ಡ್ · Hubballi Logistics Hub · 
-            <span class="live-dot-pulse">●</span> Real-time Inbound / Outbound Match Engine
+            ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ಕೃಷಿ ಸಗಟು ಮಾರುಕಟ್ಟೆ ಯಾರ್ಡ್ · Hubballi Logistics Hub · 
+            <span class="live-dot-pulse"></span> Real-time Inbound & Outbound Dispatch Control
           </p>
         </div>
         <div class="yhb-right">
           <button type="button" class="btn primary yhb-voice-cta" onclick="showView('transporter/saarathi')">
-            🎙️ ಸಾರಥಿ AI ಧ್ವನಿ ಸಹಾಯಕ (Voice Copilot)
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            <span>ಸಾರಥಿ AI ಧ್ವನಿ ಸಹಾಯಕ (Voice Copilot)</span>
           </button>
         </div>
       </div>
@@ -1366,7 +1367,7 @@ function yardHtml() {
         <div class="ym-card">
           <div class="ym-label">TRUCKS ARRIVED TODAY</div>
           <div class="ym-val" id="metricArrived">${amargolMetrics.trucksArrived}</div>
-          <div class="ym-sub">ಇಂದು ಬಂದ ಒಟ್ಟು ಟ್ರಕ್‌ಗಳು (Peak season)</div>
+          <div class="ym-sub">ಇಂದು ಬಂದ ಒಟ್ಟು ವಾಹನಗಳು (Peak Season)</div>
         </div>
 
         <div class="ym-card">
@@ -1378,55 +1379,55 @@ function yardHtml() {
         <div class="ym-card">
           <div class="ym-label">TRUCKS MATCHED</div>
           <div class="ym-val success" id="metricMatched">${amargolMetrics.trucksMatched}</div>
-          <div class="ym-sub">ವಾಪಸ್ ಸರಕು ಪಡೆದ ಟ್ರಕ್‌ಗಳು</div>
+          <div class="ym-sub">ವಾಪಸ್ ಸರಕು ಪಡೆದ ವಾಹನಗಳು</div>
         </div>
 
         <div class="ym-card alert-risk">
           <div class="ym-label">AT RISK OF EMPTY RETURN</div>
           <div class="ym-val danger" id="metricRisk">${amargolMetrics.atRiskEmpty}</div>
-          <div class="ym-sub">🔴 ಖಾಲಿ ವಾಪಸ್ ಹೋಗುವ ಅಪಾಯದಲ್ಲಿವೆ</div>
+          <div class="ym-sub"><span class="kpi-indicator danger"></span> ಖಾಲಿ ವಾಪಸ್ ಹೋಗುವ ಸಾಧ್ಯತೆ</div>
         </div>
 
         <div class="ym-card">
           <div class="ym-label">EMPTY RETURN RATE</div>
           <div class="ym-val rate-drop">${amargolMetrics.emptyReturnRate}</div>
-          <div class="ym-sub">📉 BackHaul AI ನಿಂದ ಇಳಿಕೆ</div>
+          <div class="ym-sub"><span class="kpi-indicator success"></span> ಹಿಂದಿನ 38% ದರದಿಂದ ಗಣನೀಯ ಇಳಿಕೆ</div>
         </div>
 
         <div class="ym-card highlight-gold">
           <div class="ym-label">REVENUE RECOVERED</div>
           <div class="ym-val gold">${amargolMetrics.revenueRecovered}</div>
-          <div class="ym-sub">💰 ಚಾಲಕರು ಮತ್ತು ರೈತರಿಗೆ ಉಳಿತಾಯ</div>
+          <div class="ym-sub"><span class="kpi-indicator gold"></span> ಚಾಲಕರು ಮತ್ತು ರೈತರ ನಿವ್ವಳ ಉಳಿತಾಯ</div>
         </div>
       </div>
 
       <div class="seasonal-banner-card">
         <div class="sbc-left">
-          <span class="sbc-badge">🌾 SEASONAL DEMAND INTELLIGENCE · ಪ್ರಸ್ತುತ ಸುಗ್ಗಿ ಋತು</span>
+          <span class="sbc-badge">SEASONAL HARVEST INTELLIGENCE · ಪ್ರಸ್ತುತ ಸುಗ್ಗಿ ಋತು</span>
           <h3>October – January Peak Season: Onion & Potato Arrivals</h3>
           <p>
             ಅಮರಗೋಳ ಮಂಡಿಯಲ್ಲಿ ಪ್ರಸ್ತುತ ಈರುಳ್ಳಿ ಮತ್ತು ಆಲೂಗಡ್ಡೆ ಆವಕ ಗರಿಷ್ಠ ಪ್ರಮಾಣದಲ್ಲಿದೆ. 
-            NH-48 ಕಾರಿಡಾರ್‌ನಲ್ಲಿ ಬೆಂಗಳೂರು ಮತ್ತು ಮೈಸೂರು ಮಾರ್ಗಗಳಿಗೆ ಹೆಚ್ಚಿನ ಬೇಡಿಕೆ ಇದೆ.
+            NH-48 ಕಾರಿಡಾರ್‌ನಲ್ಲಿ ಬೆಂಗಳೂರು ಮತ್ತು ಮೈಸೂರು ಮಾರ್ಗಗಳಿಗೆ ಹೆಚ್ಚಿನ ಹೊರಹರಿವಿನ ಬೇಡಿಕೆ ಇದೆ.
           </p>
         </div>
         <div class="sbc-pills">
-          <div class="season-pill high">🧅 Onion — HIGH</div>
-          <div class="season-pill high">🥔 Potato — HIGH</div>
-          <div class="season-pill med">🌶️ Byadgi Chilli — MEDIUM</div>
-          <div class="season-pill med">🌾 Cotton — MEDIUM</div>
+          <div class="season-pill high"><span class="com-dot"></span> ಈರುಳ್ಳಿ (Onion) — HIGH</div>
+          <div class="season-pill high"><span class="com-dot"></span> ಆಲೂಗಡ್ಡೆ (Potato) — HIGH</div>
+          <div class="season-pill med"><span class="com-dot"></span> ಬ್ಯಾಡಗಿ ಮೆಣಸಿನಕಾಯಿ (Chilli) — MODERATE</div>
+          <div class="season-pill med"><span class="com-dot"></span> ಹತ್ತಿ (Cotton) — MODERATE</div>
         </div>
       </div>
 
       <div class="panel live-truck-board-panel">
         <div class="ltb-header">
           <div>
-            <h2>🚛 LIVE TRUCK BOARD (ಅಮರಗೋಳ ಯಾರ್ಡ್‌ನಲ್ಲಿರುವ ವಾಹನಗಳು)</h2>
-            <p class="hint">ಟ್ರಕ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ ತಕ್ಷಣ ಸಾರಥಿ AI ಮೂಲಕ ಹೊಂದಾಣಿಕೆ ವೀಕ್ಷಿಸಿ</p>
+            <h2>LIVE TRUCK DISPATCH BOARD (ಅಮರಗೋಳ ಯಾರ್ಡ್ ವಾಹನಗಳು)</h2>
+            <p class="hint">ವಾಹನದ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ ತಕ್ಷಣ ಸಾರಥಿ ಮೂಲಕ ನೇರ ಸರಕು ಹೊಂದಾಣಿಕೆ ಪಡೆಯಿರಿ</p>
           </div>
           <div class="ltb-filters">
-            <span class="badge b-ok">🟢 Matched</span>
-            <span class="badge b-warn">🟡 Finding Load</span>
-            <span class="badge b-bad">🔴 At Risk of Empty</span>
+            <span class="badge b-ok"><span class="filter-dot success"></span> Matched</span>
+            <span class="badge b-warn"><span class="filter-dot warn"></span> Finding Load</span>
+            <span class="badge b-bad"><span class="filter-dot danger"></span> At Risk of Empty</span>
           </div>
         </div>
 
@@ -1443,28 +1444,32 @@ function yardHtml() {
               </tr>
             </thead>
             <tbody id="amargolTruckRows">
-              ${amargolTrucks.map(t => `
+              ${amargolTrucks.map(t => {
+                const knCity = cityName(t.dest);
+                const cityDisplay = (knCity && knCity !== t.dest) ? `<b>${knCity}</b> <small class="text-mute">(${t.dest})</small>` : `<b>${t.dest}</b>`;
+                return `
                 <tr data-truck-id="${t.id}" class="truck-row-item">
                   <td><b>${t.reg}</b> <small class="text-mute">(${t.type})</small></td>
                   <td>${t.cap} ಟನ್</td>
                   <td><span class="avail-weight-chip">${t.avail} ಟನ್ ಖಾಲಿ</span></td>
-                  <td><b>${cityName(t.dest)}</b> (${t.dest})</td>
+                  <td>${cityDisplay}</td>
                   <td><span class="badge ${t.badge}">${t.status}</span></td>
                   <td>
                     <button type="button" class="btn sm primary action-match-truck" data-reg="${t.reg}" data-avail="${t.avail}" data-dest="${t.dest}">
-                      ⚡ ಸರಕು ಹೊಂದಿಸಿ (Match Load)
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                      <span>ಸರಕು ಹೊಂದಿಸಿ (Match Load)</span>
                     </button>
                   </td>
                 </tr>
-              `).join('')}
+              `}).join('')}
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="panel impact-analytics-card">
-        <h2>🌱 ಪರಿಸರ ಮತ್ತು ಆರ್ಥಿಕ ಪ್ರಭಾವ (Cumulative Impact & Savings)</h2>
-        <p class="hint">BackHaul AI ನಿಂದ ತಪ್ಪಿಸಲಾದ ಖಾಲಿ ಕಿಲೋಮೀಟರ್‌ಗಳು ಮತ್ತು ಉಳಿತಾಯ</p>
+        <h2>ಪರಿಸರ ಮತ್ತು ಆರ್ಥಿಕ ಉಳಿತಾಯ (Impact & Operational Efficiency)</h2>
+        <p class="hint">BackHaul AI ನಿಂದ ತಪ್ಪಿಸಲಾದ ಖಾಲಿ ಕಿಲೋಮೀಟರ್‌ಗಳು ಮತ್ತು ಇಂಧನ ಉಳಿತಾಯ</p>
         <div class="impact-metrics-row">
           <div class="im-box">
             <span class="im-num">2,840 km</span>
@@ -1513,14 +1518,16 @@ function driverHtml() {
   return `
     <div class="driver-mode-screen">
       <div class="driver-safety-bar">
-        ⚠️ ವಾಹನ ಚಲಾಯಿಸುವಾಗ ಮೊಬೈಲ್ ಪರದೆ ನೋಡಬೇಡಿ (Do not use screen while driving)
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>ವಾಹನ ಚಲಾಯಿಸುವಾಗ ಮೊಬೈಲ್ ಪರದೆ ನೋಡಬೇಡಿ · Hands-free voice assistant mode</span>
       </div>
 
       <!-- PROACTIVE PREDICTIVE BACKHAUL ALERT -->
       <div class="proactive-alert-box">
         <div class="proactive-alert-content">
           <div class="proactive-alert-title">
-            🔮 ಸಾರಥಿ ಭವಿಷ್ಯವಾಣಿ ಎಚ್ಚರಿಕೆ (PROACTIVE BACKHAUL ALERT)
+            <span class="pred-live-badge">PREDICTIVE</span>
+            <span>ಸಾರಥಿ ಮುನ್ಸೂಚನೆ ಎಚ್ಚರಿಕೆ (PROACTIVE BACKHAUL ALERT)</span>
           </div>
           <div class="proactive-alert-desc">
             ನಿಮ್ಮ ವಾಹನ ಇನ್ನು ಸುಮಾರು <b>35 ನಿಮಿಷಗಳಲ್ಲಿ</b> ಖಾಲಿಯಾಗಲಿದೆ. ಅಮರಗೋಳದಿಂದ <b>ಬೆಂಗಳೂರಿಗೆ 87% ಹೆಚ್ಚಿನ ಸಂಭವನೀಯತೆಯ</b> ಸರಕು ಪತ್ತೆಯಾಗಿದೆ. ಅಂದಾಜು ಬಾಡಿಗೆ: <b>₹17,000–₹20,000</b> (ನಿವ್ವಳ: ~₹14,500).
@@ -1528,20 +1535,27 @@ function driverHtml() {
         </div>
         <div class="proactive-alert-actions">
           <button type="button" class="proactive-alert-btn" id="driverAlertSpeakBtn">
-            🔊 ಕೇಳಿ (Listen)
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <span>ಧ್ವನಿ ಕೇಳಿ (Listen)</span>
           </button>
           <button type="button" class="proactive-alert-btn" style="background:#12805c" onclick="showView('transporter/saarathi')">
-            🎙️ ವಿವರ ನೋಡಿ (View)
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
+            <span>ಸಾರಥಿ ಕಂಟ್ರೋಲ್ (View)</span>
           </button>
         </div>
       </div>
 
       <div class="driver-hero-voice">
         <div class="dh-title">ಚಾಲಕ ಮೋಡ್ · ಸಾರಥಿ ಧ್ವನಿ ಕೇಂದ್ರ</div>
-        <p class="dh-sub">ಮಾತನಾಡಲು ಮೈಕ್ ಒತ್ತಿ ಅಥವಾ ಕೆಳಗಿನ ಬಟನ್ ಬಳಸಿ</p>
+        <p class="dh-sub">ಮಾತನಾಡಲು ಮೈಕ್ ಒತ್ತಿ ಅಥವಾ ಕೆಳಗಿನ ವಿಭಾಗಗಳನ್ನು ಬಳಸಿ</p>
 
         <button type="button" class="driver-giant-mic" id="driverGiantMicBtn" onclick="showView('transporter/saarathi')">
-          <span class="d-mic-icon">🎙️</span>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
           <span class="d-mic-text">ಮಾತನಾಡಿ / Speak</span>
         </button>
 
@@ -1552,25 +1566,25 @@ function driverHtml() {
 
       <div class="driver-action-grid">
         <button type="button" class="driver-big-btn bg-amber" onclick="showView('transporter/future_planner')">
-          <span class="db-icon">🔮</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
           <span class="db-title">ಮುನ್ಸೂಚನೆ (AI Prediction)</span>
           <span class="db-sub">Predictive Backhaul</span>
         </button>
 
         <button type="button" class="driver-big-btn bg-navy" onclick="showView('transporter/yard')">
-          <span class="db-icon">🏢</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
           <span class="db-title">ಅಮರಗೋಳ ಯಾರ್ಡ್</span>
           <span class="db-sub">Amargol Live Yard</span>
         </button>
 
         <button type="button" class="driver-big-btn bg-green" onclick="showView('transporter/matcher')">
-          <span class="db-icon">💰</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           <span class="db-title">ಲಾಭ ಮತ್ತು ಬೆಲೆ</span>
-          <span class="db-sub">Transparent Price</span>
+          <span class="db-sub">Transparent Pricing</span>
         </button>
 
         <button type="button" class="driver-big-btn bg-slate" onclick="showView('transporter/trucks')">
-          <span class="db-icon">📋</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           <span class="db-title">ನನ್ನ ಟ್ರಕ್ ವಿವರ</span>
           <span class="db-sub">My Truck Status</span>
         </button>
