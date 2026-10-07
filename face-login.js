@@ -1,17 +1,3 @@
-/*
- * Face Login (OPTIONAL add-on for BackHaul AI).
- * Loaded AFTER style.js. Does not modify the existing auth code; it:
- *   - adds a "Login with Face" button under the existing login options,
- *   - adds a "Face Login" settings entry to the user bar,
- *   - wraps the global onFbUser() so that, after Firebase signs the user in with a
- *     server-issued custom token for their EXISTING uid, the saved profile is reused.
- * Removing this file (and its <script>/<link> tags) leaves existing auth untouched.
- *
- * Biometrics: only a transient 128-d embedding is held in memory and sent over HTTPS to the
- * server. Nothing biometric is written to localStorage/sessionStorage/URL, and no photo is kept.
- * Liveness (blink) is client-side only: a lightweight MVP check, NOT production-grade anti-spoofing.
- * Verification provider is isolated in `FaceProvider` so it can be replaced by a managed service.
- */
 (function () {
   'use strict';
   if (typeof $ !== 'function' || typeof startSession !== 'function') return; // host app not present
@@ -38,7 +24,6 @@
   const E = (code) => Object.assign(new Error(code), { code });
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-  // ---------------- Provider (replaceable) ----------------
   const FaceProvider = {
     _p: null,
     load() {
@@ -65,7 +50,6 @@
     }
   };
 
-  // ---------------- Camera ----------------
   let stream = null, runId = 0;
   async function startCamera(video) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw E('unsupported');
@@ -87,7 +71,6 @@
   window.addEventListener('pagehide', stopCamera);
   document.addEventListener('visibilitychange', () => { if (document.hidden && stream) cancel(); });
 
-  // ---------------- Capture with blink liveness ----------------
   async function capture(video, id, status) {
     const t0 = Date.now(); let phase = 'detect', centered = 0, sawOpen = false, sawClosed = false, blinked = false;
     for (;;) {
@@ -118,7 +101,6 @@
     }
   }
 
-  // ---------------- Server API ----------------
   async function api(path, body) {
     let r;
     try {
@@ -130,7 +112,6 @@
   const getCfg = async () => { try { const r = await api('config'); return r.status === 200 ? r.data : null; } catch (e) { return null; } };
   async function idToken() { return fbUser ? fbUser.getIdToken() : null; }
 
-  // ---------------- UI shell ----------------
   const ov = document.createElement('div');
   ov.id = 'faceOverlay'; ov.className = 'fl-ov'; ov.hidden = true; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
   ov.innerHTML = `<div class="fl-card" id="flCard">
@@ -162,7 +143,6 @@
     status('init', 'Look at the camera');
   }
 
-  // ---------------- Login flow ----------------
   let faceCtx = null;
   async function startLogin() {
     const id = ++runId; show('📷 Face Login', true); status('init', 'Starting...');
@@ -193,7 +173,6 @@
     buttons([anotherWay]);
   }
 
-  // Wrap (not replace) the existing Firebase user handler.
   const origOnFbUser = window.onFbUser;
   window.onFbUser = function (user) {
     if (faceCtx && user && !session && typeof origOnFbUser === 'function') {
@@ -222,7 +201,6 @@
     list.push({ label: 'Go to dashboard', ghost: true, fn: cancel }); buttons(list);
   }
 
-  // ---------------- Settings / enrollment ----------------
   let pendingDesc = null;
   async function openSettings() {
     show('📷 Face Login', false); status('init', 'Loading...');
@@ -283,7 +261,6 @@
     } catch (e) { if (e.code !== 'cancelled') fail(e, testLogin); }
   }
 
-  // ---------------- Entry points (additive) ----------------
   const g = $('authGoogle');
   if (g) {
     const wrap = document.createElement('div'); wrap.className = 'fl-entry';

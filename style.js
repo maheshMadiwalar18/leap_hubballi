@@ -340,7 +340,6 @@ function renderBell() {
 }
 
 
-// ---------- Input ----------
 function readTruck() {
   const t = { from: key($('tFrom').value), to: key($('tTo').value), cap: +$('tCap').value, avail: +$('tAvail').value, type: $('tType').value, time: $('tTime').value };
   let e = '';
@@ -368,7 +367,6 @@ function postLoad() {
   toast('Load posted. Track it under My loads.');
 }
 
-// ---------- Rendering ----------
 function statusBadge(l, t) {
   if (matched.has(l.id)) return '<span class="badge b-matched">Matched</span>';
   if (!t) return '<span class="badge b-warn">Open</span>';
@@ -488,7 +486,6 @@ function drawMap(t, l) {
   map.fitBounds(pts, { padding: [30, 30] }); setTimeout(() => map.invalidateSize(), 50);
 }
 
-// ---------- Actions ----------
 function select(id) {
   selectedId = id; const t = readTruckQuiet(), l = loads.find(x => x.id === id);
   document.querySelectorAll('.card').forEach(c => c.classList.toggle('sel', +c.dataset.id === id));
@@ -535,7 +532,6 @@ function voiceBrief(id) {
     alert(msg);
   }
 }
-// ---------- Mount (called each time the matcher / post-load view is rendered) ----------
 const cityOptions = () => Object.keys(CITIES).map(c => `<option value="${c}">${c}</option>`).join('');
 function initMatcher() {
   map = null; layer = null; lastResults = []; selectedId = null;
@@ -557,13 +553,6 @@ function initPostForm() {
 }
 
 
-/* =====================================================================
-   Role-based access, views, session & sign-in gate
-   NOTE: this is client-side demo access control only; a real product would enforce roles on a server.
-   - Firebase Auth (lazy CDN) is step 1; name + role is step 2. The role is locked for the session.
-   - If Firebase can't load (offline), "Continue offline in demo mode" works fully.
-   - All data lives in localStorage, keyed per role + user; no API is called.
-   ===================================================================== */
 const FB_VER = '10.12.2';
 const FB_CONFIG = {
   apiKey: 'AIzaSyBQP006Bnw25IAQND_3DDlEm3hLULOEaA4',
@@ -575,7 +564,6 @@ const FB_CONFIG = {
   measurementId: 'G-8VRJH52D8Z'
 };
 
-// Single source of truth: which views each role may open. Every view in the app is listed here.
 const ROLE_ACCESS = Object.freeze({
   transporter: Object.freeze(['dashboard', 'yard', 'saarathi', 'driver', 'matcher', 'trucks', 'history']),
   cargo_owner: Object.freeze(['dashboard', 'yard', 'myloads', 'post-load']),
@@ -624,7 +612,6 @@ function validSession(s) {
     typeof s.userId === 'string' && s.userId.length > 0 && typeof s.role === 'string' && hasRole(s.role);
 }
 
-// ---------- Per-role data (kept separate: a role only ever loads its own slice) ----------
 const dbKey = () => DATA_PREFIX + session.role + '_' + session.userId;
 const saveDb = () => store.set(dbKey(), db);
 function seedData(role, city) {
@@ -668,7 +655,6 @@ function ensureData(city) {
   saveDb();
 }
 
-// ---------- Hooks called by the matcher / post-load form ----------
 function onPostLoad(l) {
   if (!requireRole('cargo_owner') || !db) return false;
   db.myLoads.push({ id: l.id, from: l.from, to: l.to, weight: l.weight, type: l.type, deadline: l.deadline, price: l.price, status: 'Open', date: todayStr() });
@@ -694,7 +680,6 @@ function onAccept(id) { // returns false to veto the acceptance
   saveDb(); toast('Load accepted'); return true;
 }
 
-// ---------- Routing: every navigation goes through showView() ----------
 function showView(view, opts = {}) {
   if (!session || !appOpen) return false;
   view = String(view || '');
@@ -725,7 +710,6 @@ function renderView(view) {
 }
 function refreshView() { if (currentView && currentView !== 'matcher') MOUNTS[session.role + '/' + currentView](); }
 
-// ---------- Templates (each role's markup lives here, not in the page) ----------
 const matcherHtml = () => `
   <section class="kpis" aria-label="Impact dashboard">
     <div class="kpi"><span class="k-label">Empty km avoided</span><b id="kKm">0</b><small id="kNote">Select a match</small></div>
@@ -862,7 +846,6 @@ const MOUNTS = {
   'operator/loads-board': () => renderBoard()
 };
 
-// ---------- Transporter ----------
 function renderTKpis() {
   const del = db.trips.filter(t => t.status === 'Delivered'), sum = k => del.reduce((a, t) => a + t[k], 0);
   const util = del.length ? Math.round(sum('util') / del.length) : 0;
@@ -989,7 +972,6 @@ function drawChart() {
   }
 }
 
-// ---------- Cargo owner ----------
 function renderOKpis() {
   const my = db.myLoads, hit = my.filter(l => ['Matched', 'In transit', 'Delivered'].includes(l.status));
   const live = my.filter(l => l.status !== 'Cancelled'), avg = live.length ? Math.round(live.reduce((a, l) => a + (l.price / fairEst(l) - 1) * 100, 0) / live.length) : 0;
@@ -1035,7 +1017,6 @@ function advanceOwnerLoad(id) {
   m.status = order[i + 1]; saveDb(); refreshView();
 }
 
-// ---------- Broker-free operator ----------
 function renderPKpis() {
   const total = db.deals.reduce((a, d) => a + d.price, 0), open = loads.filter(l => !matched.has(l.id));
   put('pKpis', kpi('Loads on board', open.length) + kpi('Deals closed', db.deals.length) + kpi('Deal value', inr(total)) +
@@ -1058,7 +1039,6 @@ function closeDeal(id) {
   saveDb(); refreshView(); toast('Deal closed, no broker commission paid');
 }
 
-// ---------- Session ----------
 function showOverlay(id) { ['authOverlay', 'profileOverlay'].forEach(x => $(x).hidden = x !== id); }
 function enterApp(city) {
   appOpen = true; ensureData(city); buildNav();
@@ -1099,7 +1079,6 @@ $('profileBack').onclick = () => { showOverlay('authOverlay'); if (fbUser && fbm
 $('authOffline').onclick = () => showProfile(null);
 $('logoutBtn').onclick = () => { signOutLocal(); if (fbAuth && fbm) fbm.signOut(fbAuth).catch(() => {}); };
 
-// ---------- View events (delegated; handlers re-check the role) ----------
 document.addEventListener('click', e => {
   const n = e.target.closest('[data-nav]');
   if (n && session && appOpen) { showView(n.dataset.nav); return; }
@@ -1161,7 +1140,6 @@ $('bellRead').addEventListener('click', e => {
 });
 window.addEventListener('click', e => { if (!e.target.closest('#bellWrap')) { const b = $('bellDrop'); if (b) b.hidden = true; } });
 
-// ---------- Firebase sign-in (step 1) ----------
 const FB_MSG = {
   'auth/invalid-email': 'Enter a valid email address.', 'auth/invalid-credential': 'Incorrect email or password.',
   'auth/user-not-found': 'No account found for this email.', 'auth/wrong-password': 'Incorrect email or password.',
@@ -1222,7 +1200,6 @@ async function loadFirebase() {
   } catch (e) { fbm = null; $('authInfo').textContent = 'Offline: sign-in service unavailable. You can still use demo mode.'; }
 }
 
-// ---------- Boot ----------
 function initApp() {
   $('cities').innerHTML = Object.keys(CITIES).map(c => `<option value="${c}">`).join('');
   setAuthMode('login');
@@ -1235,17 +1212,9 @@ initApp();
 
 
 
-// =====================================================================
-// 🚚 ಸಾರಥಿ AI - Intelligent Voice Journey Companion
-// =====================================================================
 
 
-// =====================================================================
-// 🏢 BACKHAUL AI - APMC AMARGOL LIVE YARD & SAAARATHI AI ENGINE
-// LEAP Hackathon Series 2026-27 | PS 1A: Trucks that arrive full, return empty
-// =====================================================================
 
-// Simulated Live Operational Yard Data for APMC Amargol
 let amargolMetrics = {
   trucksArrived: 347,
   outboundLoads: 218,
@@ -1569,7 +1538,6 @@ function initSaarathi() {
 
   if (!micBtn || !form) return;
 
-  // Add click listeners to example chips
   document.querySelectorAll('.voice-chip').forEach(badge => {
     badge.style.cursor = 'pointer';
     badge.onclick = () => {
@@ -1581,7 +1549,6 @@ function initSaarathi() {
     };
   });
 
-  // Initialize Speech Recognition if supported
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if (SpeechRecognition) {
@@ -1692,9 +1659,6 @@ function renderAgenticReasoningSteps(steps) {
   `;
 }
 
-// ---------------------------------------------------------------------
-// 4. ACTION AGENT EXECUTION FLOW
-// ---------------------------------------------------------------------
 function handleSaarathiUtterance(userText) {
   const chatLog = $('saarathiChatLog');
   const input = $('saarathiInput');
@@ -1705,7 +1669,6 @@ function handleSaarathiUtterance(userText) {
     statusEl.innerHTML = '<span style="color:#f59e0b; font-weight:700;">🧠 ಸಾರಥಿ ಯೋಚಿಸುತ್ತಿದೆ... (Analyzing with Gemini AI...)</span>';
   }
 
-  // 1. Append user message
   if (chatLog) {
     const userDiv = document.createElement('div');
     userDiv.className = 'saarathi-msg user';
@@ -1714,7 +1677,6 @@ function handleSaarathiUtterance(userText) {
     chatLog.scrollTop = chatLog.scrollHeight;
   }
 
-  // 2. Show loading indicator
   const loadingDiv = document.createElement('div');
   loadingDiv.className = 'saarathi-msg assistant loading';
   loadingDiv.innerHTML = `<b>🚚 ಸಾರಥಿ AI:</b> <span>ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ... ⏳</span>`;
@@ -1723,7 +1685,6 @@ function handleSaarathiUtterance(userText) {
     chatLog.scrollTop = chatLog.scrollHeight;
   }
 
-  // 3. Call secure backend API /api/saarathi
   fetch('/api/saarathi', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

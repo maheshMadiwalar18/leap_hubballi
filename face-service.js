@@ -1,15 +1,3 @@
-/*
- * Face Login service (OPTIONAL add-on). Does NOT replace Firebase Auth.
- *
- * - Stores only 128-d face embeddings (no photos), AES-256-GCM encrypted at rest, server-side only.
- * - Enrollment / status / disable require a valid Firebase ID token (existing identity = source of truth).
- * - Login matches an embedding and mints a Firebase *custom token* for the EXISTING uid, so the client
- *   signs in through Firebase (signInWithCustomToken) and the existing onAuthStateChanged flow runs.
- * - The matching logic is isolated in `matchProvider` so it can be swapped for a managed biometric service.
- *
- * LIMITATION: the embedding is computed in the browser, so a hostile client could submit a replayed
- * embedding. Blink liveness is client-side only. Not production-grade biometric security.
- */
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -130,7 +118,6 @@ async function handle(req, res, pathname) {
       if (limited(req, 10, 60000)) return send(res, 429, { error: 'rate_limited' }), true;
       if (body.consent !== true) return send(res, 400, { error: 'consent_required' }), true;
       if (!matchProvider.validate(body.descriptor)) return send(res, 400, { error: 'bad_descriptor' }), true;
-      // Refuse if this face already belongs to a DIFFERENT account
       const other = matchProvider.identify(body.descriptor, store);
       if (other && other !== uid) return send(res, 409, { error: 'face_in_use' }), true;
       store[uid] = { descriptor: body.descriptor, enabled: true, createdAt: Date.now(),

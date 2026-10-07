@@ -1,4 +1,4 @@
-/* Face Login add-on styles (isolated; prefixed fl- / a-face) */
+
 .fl-entry { margin-top: 2px; }
 .a-face { background: linear-gradient(135deg, #0b2a3d, #12805c); color: #fff; border: 0; }
 .a-face:hover { filter: brightness(1.12); }

@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-// Load environment variables from .env if present
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, 'utf8');
@@ -21,7 +20,6 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-// Optional Face Login add-on (isolated; server works normally if this fails to load)
 let faceService = null;
 try { faceService = require('./face-service'); } catch (e) { console.warn('[Face] disabled:', e.message); }
 
@@ -332,7 +330,6 @@ const server = http.createServer((req, res) => {
     }));
   }
 
-  // Never serve dotfiles/dot-directories (.env, .face_data, .git)
   if (pathname.split('/').some(seg => seg.startsWith('.'))) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     return res.end('404 Not Found');
