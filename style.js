@@ -41,6 +41,16 @@ const I18N = {
     'prof.cityLabel': 'Base location (optional)', 'prof.cityHolder': 'e.g. Hubballi', 'prof.hint': 'Your role is fixed for this session. To use another role, sign out and sign in again.',
     'prof.submit': 'Open my dashboard', 'prof.demoOr': 'or one-click demo', 'prof.demoRamesh': 'Ramesh Patil<small>Transporter · Hubballi</small>',
     'prof.demoKisan': 'Kisan Agro Traders<small>Cargo owner · Amargol APMC</small>', 'prof.demoYard': 'Amargol Yard Desk<small>Operator · Amargol APMC</small>', 'prof.backBtn': 'Back to sign-in',
+    'nav.future_planner': '🔮 Predictive Backhaul', 'nav.plan_future': '🌱 Plan Future Shipment',
+    'title.predBackhaul': 'Predictive Backhaul Opportunities', 'title.futureTrips': 'My Planned Forward Trips',
+    'title.watchlist': 'Predictive Route Watchlist', 'btn.planTrip': '➕ Plan Forward Trip',
+    'btn.watchLoad': '👁️ Watch Load', 'btn.reserveInterest': '⚡ Reserve Interest', 'btn.viewMapRoute': '🗺️ View Map Route',
+    'horizon.7d': 'Next 7 Days', 'horizon.14d': 'Next 14 Days', 'horizon.30d': 'Next 30 Days',
+    'pred.kpiAvoided': 'Est. Empty Km Avoided', 'pred.kpiFuel': 'Est. Fuel Saved', 'pred.kpiRevenue': 'Est. Extra Revenue',
+    'pred.kpiMatchRate': 'Avg. Predictive Score', 'pred.riskTitle': 'Empty Return Risk Reduction',
+    'pred.riskLoaded': 'Loaded Return', 'pred.riskEmpty': 'Empty Return',
+    'pred.cropPlanned': 'Crop / Cargo Planned', 'pred.forwardTrip': 'Forward Journey', 'pred.availIn': 'Available in',
+    'pred.predictedReturn': 'Predicted Return Load', 'pred.loadedReturn': 'Loaded Return',
     't.Medium Cargo': 'Medium Cargo', 't.Open Body': 'Open Body', 't.Container': 'Container', 't.Refrigerated': 'Refrigerated',
     'title.trucks': 'My trucks', 'title.history': 'Trip history', 'title.myloads': 'My loads', 'title.post': 'Post a return load', 'title.deals': 'Recent deals', 'title.board': 'Open load board',
     'title.active': 'Active match', 'title.chart': 'Last 6 weeks: earnings and empty km avoided',
@@ -565,12 +575,12 @@ const FB_CONFIG = {
 };
 
 const ROLE_ACCESS = Object.freeze({
-  transporter: Object.freeze(['dashboard', 'yard', 'saarathi', 'driver', 'matcher', 'trucks', 'history']),
-  cargo_owner: Object.freeze(['dashboard', 'yard', 'myloads', 'post-load']),
-  operator: Object.freeze(['dashboard', 'yard', 'saarathi', 'driver', 'matcher', 'loads-board'])
+  transporter: Object.freeze(['dashboard', 'yard', 'saarathi', 'driver', 'matcher', 'future_planner', 'trucks', 'history']),
+  cargo_owner: Object.freeze(['dashboard', 'yard', 'myloads', 'post-load', 'plan_future']),
+  operator: Object.freeze(['dashboard', 'yard', 'saarathi', 'driver', 'matcher', 'future_planner', 'loads-board'])
 });
 const ROLES = Object.freeze({ transporter: 'Transporter', cargo_owner: 'Cargo owner', operator: 'Broker-free operator' });
-const VIEW_LABEL = Object.freeze({ dashboard: 'Dashboard', yard: '🏢 APMC Live Yard', saarathi: '🎙️ ಸಾರಥಿ AI', driver: '🚚 ಚಾಲಕ ಮೋಡ್', matcher: 'Matcher', trucks: 'My trucks', history: 'Trip history', myloads: 'My loads', 'post-load': 'Post load', 'loads-board': 'Loads board' });
+const VIEW_LABEL = Object.freeze({ dashboard: 'Dashboard', yard: '🏢 APMC Live Yard', saarathi: '🎙️ ಸಾರಥಿ AI', driver: '🚚 ಚಾಲಕ ಮೋಡ್', matcher: 'Matcher', trucks: 'My trucks', history: 'Trip history', myloads: 'My loads', 'post-load': 'Post load', 'loads-board': 'Loads board', future_planner: '🔮 Predictive Backhaul', plan_future: '🌱 Plan Future Shipment' });
 const STEPS = ['Matched', 'Picked up', 'In transit', 'Delivered'];
 const SESSION_KEY = 'bh_session', DATA_PREFIX = 'bh_data_', BROKER_FEE = 0.15;
 const DEMO_USERS = Object.freeze({
@@ -827,6 +837,9 @@ const TEMPLATES = {
 };
 
 const MOUNTS = {
+  'transporter/future_planner': () => initFuturePlanner(),
+  'operator/future_planner': () => initFuturePlanner(),
+  'cargo_owner/plan_future': () => initPlanFuture(),
   'transporter/dashboard': () => { checkAlerts(); renderAlerts(); renderTKpis(); renderActive(); drawChart(); },
   'transporter/saarathi': () => initSaarathi(),
   'transporter/yard': () => initYard(),
@@ -2200,5 +2213,555 @@ function speakSaarathi(text) {
 if ('speechSynthesis' in window) {
   speechSynthesis.onvoiceschanged = () => {
     try { speechSynthesis.getVoices(); } catch(e) {}
+  };
+}
+
+
+const futureDateStr = (days) => {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
+const FUTURE_LOADS_DATA = [
+  {
+    id: 'FL-201',
+    from: 'Bengaluru',
+    to: 'Hubballi',
+    cargo: 'Fertilizer (IFFCO)',
+    weight: 8.2,
+    price: 14800,
+    pickupDate: futureDateStr(7),
+    deadline: '18:00',
+    demandLevel: 'High (Pre-sowing season)',
+    seasonalityBonus: 10,
+    contact: 'KMF / Agro Input Hub',
+    originCorridor: 'Bengaluru'
+  },
+  {
+    id: 'FL-202',
+    from: 'Bengaluru',
+    to: 'Dharwad',
+    cargo: 'Industrial Machinery',
+    weight: 6.0,
+    price: 12500,
+    pickupDate: futureDateStr(9),
+    deadline: '20:00',
+    demandLevel: 'Medium',
+    seasonalityBonus: 5,
+    contact: 'Peenya Industrial Logistics',
+    originCorridor: 'Bengaluru'
+  },
+  {
+    id: 'FL-203',
+    from: 'Bengaluru',
+    to: 'Gadag',
+    cargo: 'Processed Grains',
+    weight: 7.0,
+    price: 16200,
+    pickupDate: futureDateStr(12),
+    deadline: '19:00',
+    demandLevel: 'High',
+    seasonalityBonus: 8,
+    contact: 'Karnataka Food Logistics',
+    originCorridor: 'Bengaluru'
+  },
+  {
+    id: 'FL-204',
+    from: 'Belagavi',
+    to: 'Hubballi',
+    cargo: 'Refined Sugar',
+    weight: 9.5,
+    price: 11200,
+    pickupDate: futureDateStr(14),
+    deadline: '17:00',
+    demandLevel: 'High (Sugar Mill Season)',
+    seasonalityBonus: 10,
+    contact: 'Ghataprabha Sugars',
+    originCorridor: 'Belagavi'
+  },
+  {
+    id: 'FL-205',
+    from: 'Mysuru',
+    to: 'Hubballi',
+    cargo: 'Silk & Textiles',
+    weight: 4.5,
+    price: 15400,
+    pickupDate: futureDateStr(18),
+    deadline: '21:00',
+    demandLevel: 'Medium',
+    seasonalityBonus: 5,
+    contact: 'Mysuru Silk Exchange',
+    originCorridor: 'Mysuru'
+  }
+];
+
+function calculatePredictiveBackhaulScore(plannedTrip, load) {
+  const truckCap = plannedTrip.truckCap || (plannedTrip.truckId && db.trucks ? (db.trucks.find(t => t.id === plannedTrip.truckId)?.cap || 10) : 10);
+  const tripQty = plannedTrip.quantity || 8;
+  const availDate = new Date(plannedTrip.estimatedAvailableDate || plannedTrip.expectedDeliveryDate || todayStr());
+  const loadDate = new Date(load.pickupDate || load.date || todayStr());
+  const diffDays = Math.max(0, Math.round((loadDate - availDate) / 864e5));
+
+  let dateScore = 20;
+  if (diffDays === 0) dateScore = 20;
+  else if (diffDays === 1) dateScore = 18;
+  else if (diffDays === 2) dateScore = 14;
+  else if (diffDays === 3) dateScore = 10;
+  else if (diffDays <= 7) dateScore = 7;
+  else dateScore = 4;
+
+  let routeScore = 10;
+  const forwardDest = key(plannedTrip.destination) || 'Bengaluru';
+  const forwardOrig = key(plannedTrip.origin) || 'Hubballi';
+  const loadFrom = key(load.from) || '';
+  const loadTo = key(load.to) || '';
+  
+  if (loadFrom === forwardDest && (loadTo === forwardOrig || loadTo === 'Hubballi' || loadTo === 'Dharwad')) {
+    routeScore = 25;
+  } else if (loadFrom === forwardDest) {
+    const returnDetour = dist(loadTo, forwardOrig);
+    routeScore = returnDetour < 60 ? 22 : returnDetour < 120 ? 18 : 12;
+  } else {
+    const origDetour = dist(forwardDest, loadFrom);
+    routeScore = origDetour < 50 ? 18 : 10;
+  }
+
+  let capScore = 10;
+  const loadWt = load.weight || 6;
+  const capRatio = loadWt / truckCap;
+  if (capRatio >= 0.70 && capRatio <= 1.05) capScore = 20;
+  else if (capRatio >= 0.50 && capRatio < 0.70) capScore = 15;
+  else if (capRatio > 1.05) capScore = 6;
+  else capScore = 10;
+
+  const dOrig = dist(forwardDest, loadFrom);
+  const dDest = dist(loadTo, forwardOrig);
+  const totalDetour = Math.round(dOrig + (loadTo === forwardOrig ? 0 : dDest));
+  let detourScore = 15;
+  if (totalDetour <= 15) detourScore = 15;
+  else if (totalDetour <= 40) detourScore = 12;
+  else if (totalDetour <= 80) detourScore = 8;
+  else detourScore = 5;
+
+  const fair = fairEst(load);
+  const revRatio = fair > 0 ? (load.price / fair) : 1;
+  let revScore = 10;
+  if (revRatio >= 0.95) revScore = 10;
+  else if (revRatio >= 0.85) revScore = 8;
+  else revScore = 6;
+
+  let demandScore = load.seasonalityBonus || 8;
+  const totalScore = Math.min(100, Math.round(dateScore + routeScore + capScore + detourScore + revScore + demandScore));
+  const kmReturn = Math.round(dist(load.from, load.to));
+  const fuelSavedL = Math.round(kmReturn * DIESEL_L_PER_KM * 0.85);
+  const emptyKmAvoided = kmReturn;
+  const extraRevenue = load.price;
+
+  const reasons = [
+    { tone: dateScore >= 14 ? 'good' : 'warn', text: diffDays === 0 ? 'Exact pickup date match with arrival' : 'Pickup in +' + diffDays + ' days from arrival window' },
+    { tone: routeScore >= 20 ? 'good' : 'warn', text: 'Return corridor: ' + load.from + ' → ' + load.to },
+    { tone: capScore >= 15 ? 'good' : 'warn', text: 'Weight: ' + loadWt + 't fits ' + truckCap + 't truck capacity' },
+    { tone: detourScore >= 12 ? 'good' : 'warn', text: 'Low detour: ' + totalDetour + ' km on main NH corridor' },
+    { tone: 'good', text: 'Revenue: ' + inr(extraRevenue) + ' (0% broker commission)' }
+  ];
+
+  return {
+    score: totalScore,
+    parts: [dateScore, routeScore, capScore, detourScore, revScore, demandScore],
+    detourKm: totalDetour,
+    emptyKmAvoided,
+    fuelSavedL,
+    extraRevenue,
+    diffDays,
+    reasons
+  };
+}
+
+function findFutureBackhaulOpportunities(plannedTrip, horizonDays = 30) {
+  if (!plannedTrip) return [];
+  const availDate = new Date(plannedTrip.estimatedAvailableDate || plannedTrip.expectedDeliveryDate || todayStr());
+  const maxDate = new Date(availDate);
+  maxDate.setDate(maxDate.getDate() + horizonDays);
+
+  const candidates = [...FUTURE_LOADS_DATA];
+  if (db && db.myLoads) {
+    db.myLoads.forEach(ml => {
+      if (ml.status === 'Open' || ml.status === 'Matched') {
+        candidates.push({
+          id: 'ML-' + ml.id,
+          from: ml.from,
+          to: ml.to,
+          cargo: ml.type,
+          weight: ml.weight,
+          price: ml.price,
+          pickupDate: ml.date || futureDateStr(7),
+          deadline: ml.deadline || '20:00',
+          demandLevel: 'Live APMC Post',
+          seasonalityBonus: 8
+        });
+      }
+    });
+  }
+
+  const matches = [];
+  candidates.forEach(l => {
+    const lDate = new Date(l.pickupDate || todayStr());
+    if (lDate >= availDate && lDate <= maxDate) {
+      const pred = calculatePredictiveBackhaulScore(plannedTrip, l);
+      matches.push({ load: l, ...pred });
+    }
+  });
+
+  matches.sort((a, b) => b.score - a.score);
+  return matches;
+}
+
+function ensurePlannedTrips() {
+  if (!db) return;
+  if (!db.plannedTrips) {
+    db.plannedTrips = [
+      {
+        id: 501,
+        truckId: 1,
+        truckReg: 'KA-25-AB-1234',
+        cargoType: 'Onions',
+        quantity: 8,
+        origin: 'Hubballi',
+        destination: 'Bengaluru',
+        expectedPickupDate: futureDateStr(5),
+        expectedDeliveryDate: futureDateStr(7),
+        estimatedAvailableDate: futureDateStr(7),
+        status: 'planned',
+        notes: 'Kisan Agro Traders onion harvest to APMC Yeshwanthpur'
+      },
+      {
+        id: 502,
+        truckId: 2,
+        truckReg: 'KA-25-CD-5678',
+        cargoType: 'Dry chilli',
+        quantity: 10,
+        origin: 'Hubballi',
+        destination: 'Belagavi',
+        expectedPickupDate: futureDateStr(12),
+        expectedDeliveryDate: futureDateStr(13),
+        estimatedAvailableDate: futureDateStr(13),
+        status: 'planned',
+        notes: 'Byadgi chilli delivery to Belagavi spice market'
+      }
+    ];
+  }
+  if (!db.watchlist) {
+    db.watchlist = [
+      { id: 'W-1', route: 'Bengaluru → Hubballi', dateWindow: 'Next 30 days', minTons: 6, matchedCount: 3 }
+    ];
+  }
+}
+
+let activeHorizon = 30;
+let selPlannedTripId = 501;
+
+function renderTimelineHtml(trip, bestMatch) {
+  if (!trip) return '';
+  const returnCargo = bestMatch ? (bestMatch.load.cargo || 'Return Freight') : 'Fertilizer (8.2t)';
+  const returnRev = bestMatch ? inr(bestMatch.extraRevenue) : '₹14,800';
+  return '<div class="pred-timeline">' +
+    '<div class="pt-step done"><div class="pt-circle">1</div><div class="pt-title">Today</div><div class="pt-sub">' + todayStr() + '</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step active"><div class="pt-circle">2</div><div class="pt-title">' + (trip.cargoType || 'Cargo') + ' Planned</div><div class="pt-sub">' + trip.quantity + ' tonnes</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step"><div class="pt-circle">3</div><div class="pt-title">Pickup</div><div class="pt-sub">' + trip.expectedPickupDate + '</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step"><div class="pt-circle">4</div><div class="pt-title">Forward Trip</div><div class="pt-sub">' + trip.origin + ' → ' + trip.destination + '</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step"><div class="pt-circle">5</div><div class="pt-title">Delivery</div><div class="pt-sub">' + trip.expectedDeliveryDate + '</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step predicted"><div class="pt-circle">6</div><div class="pt-title">Truck Available</div><div class="pt-sub">in ' + trip.destination + '</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step predicted"><div class="pt-circle">7</div><div class="pt-title">' + returnCargo + '</div><div class="pt-sub">Pre-matched</div></div>' +
+    '<div class="pt-arrow">➔</div>' +
+    '<div class="pt-step future-win"><div class="pt-circle">✓</div><div class="pt-title">Loaded Return</div><div class="pt-sub">' + returnRev + '</div></div>' +
+  '</div>';
+}
+
+function futurePlannerHtml() {
+  ensurePlannedTrips();
+  const trips = db.plannedTrips || [];
+  const curTrip = trips.find(x => x.id === selPlannedTripId) || trips[0];
+  const matches = curTrip ? findFutureBackhaulOpportunities(curTrip, activeHorizon) : [];
+  const topMatch = matches[0];
+
+  const bannerHtml = topMatch ? 
+    ('<div class="pred-banner">' +
+      '<div class="pred-banner-left">' +
+        '<div class="pred-banner-icon">🔮</div>' +
+        '<div>' +
+          '<h3>Proactive Return Match Found (' + topMatch.score + '% Match)</h3>' +
+          '<p>Your truck <b>' + (curTrip.truckReg || 'KA-25-AB-1234') + '</b> is expected in <b>' + curTrip.destination + '</b> on <b>' + curTrip.expectedDeliveryDate + '</b>. We pre-matched <b>' + topMatch.load.cargo + ' (' + topMatch.load.weight + 't)</b> back to ' + topMatch.load.to + ' for <b>' + inr(topMatch.extraRevenue) + '</b>.</p>' +
+        '</div>' +
+      '</div>' +
+      '<button class="pred-banner-btn" data-act="predWatch" data-id="' + topMatch.load.id + '">⚡ Reserve & Watch</button>' +
+    '</div>') : '';
+
+  const kpisHtml = '<section class="kpis" aria-label="Predictive KPIs">' +
+    '<div class="kpi"><span class="k-label">' + t('pred.kpiAvoided') + '</span><b>' + (topMatch ? topMatch.emptyKmAvoided : 410) + ' km</b><small>Per planned round-trip</small></div>' +
+    '<div class="kpi"><span class="k-label">' + t('pred.kpiFuel') + '</span><b>' + (topMatch ? topMatch.fuelSavedL : 123) + ' L</b><small>Diesel saved</small></div>' +
+    '<div class="kpi"><span class="k-label">' + t('pred.kpiRevenue') + '</span><b>' + (topMatch ? inr(topMatch.extraRevenue) : '₹14,800') + '</b><small>0% broker commission</small></div>' +
+    '<div class="kpi"><span class="k-label">' + t('pred.kpiMatchRate') + '</span><b>' + (topMatch ? topMatch.score : 94) + '%</b><div class="bar"><i style="width:' + (topMatch ? topMatch.score : 94) + '%"></i></div></div>' +
+  '</section>';
+
+  const horizonHtml = '<div class="pred-horizon-bar">' +
+    '<div style="font-weight:700;font-size:16px;color:var(--navy)">Forecast Prediction Horizon:</div>' +
+    '<div class="pred-horizon-tabs">' +
+      '<button class="pred-horizon-btn ' + (activeHorizon === 7 ? 'active' : '') + '" data-horizon="7">' + t('horizon.7d') + '</button>' +
+      '<button class="pred-horizon-btn ' + (activeHorizon === 14 ? 'active' : '') + '" data-horizon="14">' + t('horizon.14d') + '</button>' +
+      '<button class="pred-horizon-btn ' + (activeHorizon === 30 ? 'active' : '') + '" data-horizon="30">' + t('horizon.30d') + '</button>' +
+    '</div>' +
+  '</div>';
+
+  const riskHtml = '<div class="pred-risk-widget">' +
+    '<div style="font-weight:700;font-size:15px;color:var(--navy)">' + t('pred.riskTitle') + '</div>' +
+    '<p class="hint">Comparing standard unassisted return trip vs Proactive Predictive BackHaul AI matching.</p>' +
+    '<div class="risk-cmp">' +
+      '<div class="risk-box">' +
+        '<div class="risk-box-title">Without BackHaul AI (Traditional APMC)</div>' +
+        '<div style="font-size:18px;font-weight:800;color:var(--ink)">72% Loaded · <span style="color:var(--red)">28% Empty Return</span></div>' +
+        '<div class="risk-bar-wrap"><div class="risk-bar-loaded" style="width:72%"></div><div class="risk-bar-empty" style="width:28%"></div></div>' +
+      '</div>' +
+      '<div class="risk-box improved">' +
+        '<div class="risk-box-title" style="color:var(--green)">With Predictive BackHaul AI</div>' +
+        '<div style="font-size:18px;font-weight:800;color:var(--green)">88% Loaded · <span style="color:#059669">12% Empty Risk</span> (↓ 57% lower)</div>' +
+        '<div class="risk-bar-wrap"><div class="risk-bar-loaded" style="width:88%;background:var(--green)"></div><div class="risk-bar-empty" style="width:12%;background:#fca5a5"></div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  const tripSelector = '<div class="panel" style="margin-bottom:16px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+      '<h2>' + t('title.futureTrips') + ' <span class="count">(' + trips.length + ')</span></h2>' +
+      '<button class="btn sm primary" style="width:auto" data-act="openPlanModal">' + t('btn.planTrip') + '</button>' +
+    '</div>' +
+    '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px">' +
+      trips.map(tr => {
+        const isSel = tr.id === selPlannedTripId;
+        return '<div class="card ' + (isSel ? 'sel' : '') + '" style="min-width:260px;cursor:pointer" data-select-trip="' + tr.id + '">' +
+          '<div style="display:flex;justify-content:space-between"><b style="color:var(--navy)">' + tr.origin + ' ➔ ' + tr.destination + '</b><span class="badge b-ok">' + tr.status + '</span></div>' +
+          '<div class="stats" style="margin-top:6px">' +
+            '<div><span>Truck:</span><b>' + (tr.truckReg || 'KA-25-AB-1234') + '</b></div>' +
+            '<div><span>Cargo:</span><b>' + tr.cargoType + ' (' + tr.quantity + 't)</b></div>' +
+            '<div><span>Pickup:</span><b>' + tr.expectedPickupDate + '</b></div>' +
+            '<div><span>Delivery:</span><b>' + tr.expectedDeliveryDate + '</b></div>' +
+          '</div>' +
+        '</div>';
+      }).join('') +
+    '</div>' +
+  '</div>';
+
+  const matchCards = '<h2 class="sect">' + t('title.predBackhaul') + ' <span class="count">(' + matches.length + ' predicted opportunities in next ' + activeHorizon + ' days)</span></h2>' +
+    '<div class="cards">' +
+      (matches.length ? matches.map((m, i) => {
+        const isHigh = m.score >= 85;
+        return '<article class="pred-card ' + (i === 0 ? 'top-match' : '') + '">' +
+          '<div class="pred-header">' +
+            '<div><span class="badge ' + (isHigh ? 'b-ok' : 'b-warn') + '">' + m.load.pickupDate + ' (' + (m.diffDays === 0 ? 'Same-day turnaround' : '+' + m.diffDays + ' days') + ')</span>' +
+            '<div style="font-weight:700;font-size:16px;margin-top:4px;color:var(--navy)">' + m.load.from + ' ➔ ' + m.load.to + '</div></div>' +
+            '<div class="pred-score-badge ' + (isHigh ? 'high' : 'mid') + '">' + m.score + '%<small style="font-size:10px;color:inherit">MATCH</small></div>' +
+          '</div>' +
+          '<div class="stats">' +
+            '<div><span>Cargo:</span><b>' + m.load.cargo + '</b></div>' +
+            '<div><span>Weight:</span><b>' + m.load.weight + ' tonnes</b></div>' +
+            '<div><span>Est. Revenue:</span><b style="color:var(--green)">' + inr(m.extraRevenue) + '</b></div>' +
+            '<div><span>Detour:</span><b>' + m.detourKm + ' km</b></div>' +
+          '</div>' +
+          '<div class="pred-breakdown">' +
+            '<div class="pred-breakdown-row"><span>Date Compatibility (20%):</span><b>' + m.parts[0] + '/20</b></div>' +
+            '<div class="pred-breakdown-row"><span>Route Compatibility (25%):</span><b>' + m.parts[1] + '/25</b></div>' +
+            '<div class="pred-breakdown-row"><span>Capacity Fit (20%):</span><b>' + m.parts[2] + '/20</b></div>' +
+            '<div class="pred-breakdown-row"><span>Low Detour (15%):</span><b>' + m.parts[3] + '/15</b></div>' +
+            '<div class="pred-breakdown-row"><span>Revenue vs Fair Rate (10%):</span><b>' + m.parts[4] + '/10</b></div>' +
+            '<div class="pred-breakdown-row"><span>Seasonality / Demand (10%):</span><b>' + m.parts[5] + '/10</b></div>' +
+          '</div>' +
+          '<div class="pred-reasons">' +
+            m.reasons.map(r => '<div class="pred-reason-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>' + esc(r.text) + '</span></div>').join('') +
+          '</div>' +
+          '<div class="actions" style="margin-top:10px">' +
+            '<button class="btn" data-act="predWatch" data-id="' + m.load.id + '">' + t('btn.watchLoad') + '</button>' +
+            '<button class="btn primary" data-act="predReserve" data-id="' + m.load.id + '">' + t('btn.reserveInterest') + '</button>' +
+          '</div>' +
+        '</article>';
+      }).join('') : '<div class="empty">No future return loads match the selected horizon. Expand to 30 days or plan another forward trip.</div>') +
+    '</div>';
+
+  const mapAndWatchlist = '<div class="grid2 lower">' +
+    '<div class="panel"><h2>Route Preview: Forward & Predicted Return</h2><div id="predMap" style="height:320px;border-radius:8px"></div>' +
+      '<div style="display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--mute)">' +
+        '<div><span style="color:#12805c;font-weight:700">━━</span> Forward: ' + (curTrip ? curTrip.origin + ' ➔ ' + curTrip.destination : '') + '</div>' +
+        '<div><span style="color:#2563eb;font-weight:700">╍╍</span> Predicted Return: ' + (topMatch ? topMatch.load.from + ' ➔ ' + topMatch.load.to : '') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="panel">' +
+      '<h2>' + t('title.watchlist') + '</h2>' +
+      '<p class="hint">Active routes under automated surveillance. When high-match cargo is posted, Saarathi AI notifies you proactively.</p>' +
+      '<div id="watchlistList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px">' +
+        (db.watchlist || []).map(w => '<div class="card" style="padding:10px 12px;display:flex;justify-content:space-between;align-items:center">' +
+          '<div><b style="color:var(--navy)">' + w.route + '</b><br><small style="color:var(--mute)">Window: ' + w.dateWindow + ' · Min ' + w.minTons + 't</small></div>' +
+          '<span class="badge b-ok">' + w.matchedCount + ' matches</span>' +
+        '</div>').join('') +
+      '</div>' +
+      '<div style="margin-top:14px"><button class="btn" style="width:100%" data-act="addWatchRoute">➕ Add Route to Watchlist</button></div>' +
+    '</div>' +
+  '</div>';
+
+  return bannerHtml + kpisHtml + horizonHtml + tripSelector + (curTrip ? renderTimelineHtml(curTrip, topMatch) : '') + matchCards + riskHtml + mapAndWatchlist;
+}
+
+function initFuturePlanner() {
+  ensurePlannedTrips();
+  document.querySelectorAll('[data-horizon]').forEach(btn => {
+    btn.onclick = () => {
+      activeHorizon = parseInt(btn.dataset.horizon, 10);
+      renderView('future_planner');
+    };
+  });
+  document.querySelectorAll('[data-select-trip]').forEach(el => {
+    el.onclick = () => {
+      selPlannedTripId = parseInt(el.dataset.selectTrip, 10);
+      renderView('future_planner');
+    };
+  });
+  document.querySelectorAll('[data-act="predWatch"]').forEach(b => {
+    b.onclick = (e) => {
+      e.stopPropagation();
+      toast('Opportunity added to Predictive Watchlist. Notifications enabled.');
+      addNotification('Watched load ' + b.dataset.id + ' added to alerts.');
+    };
+  });
+  document.querySelectorAll('[data-act="predReserve"]').forEach(b => {
+    b.onclick = (e) => {
+      e.stopPropagation();
+      toast('Interest reserved with cargo owner. Zero commission locked.');
+      addNotification('Interest reserved for backhaul opportunity ' + b.dataset.id);
+    };
+  });
+  document.querySelectorAll('[data-act="openPlanModal"]').forEach(b => {
+    b.onclick = () => {
+      const orig = prompt('Origin city (e.g. Hubballi):', 'Hubballi');
+      if (!orig) return;
+      const dest = prompt('Destination city (e.g. Bengaluru):', 'Bengaluru');
+      if (!dest) return;
+      const cargo = prompt('Cargo type (e.g. Onions, Maize, Cotton):', 'Onions');
+      const qty = parseFloat(prompt('Quantity in tonnes:', '8')) || 8;
+      const days = parseInt(prompt('Expected delivery in how many days?', '7'), 10) || 7;
+      
+      const newTrip = {
+        id: db.plannedTrips.length ? Math.max(...db.plannedTrips.map(x => x.id)) + 1 : 501,
+        truckId: 1,
+        truckReg: db.trucks && db.trucks[0] ? db.trucks[0].reg : 'KA-25-AB-1234',
+        cargoType: cargo,
+        quantity: qty,
+        origin: orig,
+        destination: dest,
+        expectedPickupDate: futureDateStr(Math.max(1, days - 2)),
+        expectedDeliveryDate: futureDateStr(days),
+        estimatedAvailableDate: futureDateStr(days),
+        status: 'planned'
+      };
+      db.plannedTrips.push(newTrip);
+      selPlannedTripId = newTrip.id;
+      saveDb();
+      toast('Forward trip planned! Predictive backhaul search active.');
+      renderView('future_planner');
+    };
+  });
+  document.querySelectorAll('[data-act="addWatchRoute"]').forEach(b => {
+    b.onclick = () => {
+      const r = prompt('Route to watch (e.g. Mysuru → Hubballi):', 'Mysuru → Hubballi');
+      if (!r) return;
+      if (!db.watchlist) db.watchlist = [];
+      db.watchlist.push({ id: 'W-' + (db.watchlist.length + 1), route: r, dateWindow: 'Next 30 days', minTons: 6, matchedCount: 1 });
+      saveDb();
+      toast('Route added to Watchlist.');
+      renderView('future_planner');
+    };
+  });
+
+  drawPredMap();
+}
+
+function drawPredMap() {
+  const mapEl = $('predMap');
+  if (!mapEl || !window.L) return;
+  const trips = db.plannedTrips || [];
+  const curTrip = trips.find(x => x.id === selPlannedTripId) || trips[0];
+  const matches = curTrip ? findFutureBackhaulOpportunities(curTrip, activeHorizon) : [];
+  const topMatch = matches[0];
+
+  try {
+    const pMap = L.map('predMap').setView([14.5, 76.2], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(pMap);
+    
+    if (curTrip) {
+      const origPt = CITIES[curTrip.origin] || [15.3647, 75.1240];
+      const destPt = CITIES[curTrip.destination] || [12.9716, 77.5946];
+      L.polyline([origPt, destPt], { color: '#12805c', weight: 4 }).addTo(pMap);
+      L.circleMarker(origPt, { radius: 7, color: '#12805c', fillColor: '#12805c', fillOpacity: 1 }).bindTooltip('Forward Origin: ' + curTrip.origin).addTo(pMap);
+      L.circleMarker(destPt, { radius: 7, color: '#0b2a4a', fillColor: '#0b2a4a', fillOpacity: 1 }).bindTooltip('Forward Dest: ' + curTrip.destination).addTo(pMap);
+
+      if (topMatch) {
+        const retOrig = CITIES[topMatch.load.from] || destPt;
+        const retDest = CITIES[topMatch.load.to] || origPt;
+        L.polyline([retOrig, retDest], { color: '#2563eb', weight: 4, dashArray: '6 8' }).addTo(pMap);
+        L.circleMarker(retDest, { radius: 7, color: '#2563eb', fillColor: '#2563eb', fillOpacity: 1 }).bindTooltip('Return Dest: ' + topMatch.load.to).addTo(pMap);
+      }
+    }
+  } catch (e) {}
+}
+
+function planFutureCargoHtml() {
+  return '<div class="panel" style="max-width:700px;margin:0 auto">' +
+    '<h2>' + t('nav.plan_future') + '</h2>' +
+    '<p class="hint">Register upcoming farm harvests or factory production. BackHaul AI predicts and matches return haulers weeks in advance, eliminating last-minute price spikes.</p>' +
+    '<form id="planFutureForm" class="fields" style="margin-top:16px">' +
+      '<label>Cargo Type<input id="pfCargo" placeholder="e.g. Onions, Maize, Cotton" value="Onions" required></label>' +
+      '<label>Quantity (tonnes)<input id="pfQty" type="number" step="0.5" min="1" value="8" required></label>' +
+      '<label>Origin / Farm Location<input id="pfFrom" list="cities" value="APMC Amargol, Hubballi" required></label>' +
+      '<label>Target Destination<select id="pfTo"></select></label>' +
+      '<label>Expected Harvest Date<input id="pfHarvest" type="date" value="' + futureDateStr(25) + '"></label>' +
+      '<label>Expected Pickup Date<input id="pfPickup" type="date" value="' + futureDateStr(30) + '"></label>' +
+      '<div class="err" id="pfErr" style="grid-column:1/-1"></div>' +
+      '<div style="grid-column:1/-1;margin-top:8px">' +
+        '<button class="btn primary" type="submit">Enable Predictive Backhaul Matching</button>' +
+      '</div>' +
+    '</form>' +
+  '</div>';
+}
+
+function initPlanFuture() {
+  $('pfTo').innerHTML = cityOptions();
+  $('pfTo').value = 'Bengaluru';
+  $('planFutureForm').onsubmit = (e) => {
+    e.preventDefault();
+    const cargo = $('pfCargo').value.trim();
+    const qty = parseFloat($('pfQty').value) || 8;
+    const from = $('pfFrom').value.trim();
+    const to = $('pfTo').value;
+    const pDate = $('pfPickup').value;
+
+    if (!db.myLoads) db.myLoads = [];
+    const newL = {
+      id: 2000 + db.myLoads.length + 1,
+      from,
+      to,
+      weight: qty,
+      type: cargo,
+      deadline: '20:00',
+      price: Math.round(dist(from, to) * RATE_PER_KM * 0.95),
+      status: 'Open',
+      date: pDate
+    };
+    db.myLoads.unshift(newL);
+    saveDb();
+    toast('Predictive shipment planned! BackHaul return haulers notified.');
+    showView('myloads');
   };
 }

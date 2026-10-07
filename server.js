@@ -130,6 +130,17 @@ function fallbackParse(text, lang = 'kn') {
     reply = isKn ?
       `ಈ ಸರಕು 94% ಹೊಂದಾಣಿಕೆಯಾಗಿದೆ: ನಿಮ್ಮ ${capacity} ಟನ್ ಸಾಮರ್ಥ್ಯಕ್ಕೆ ಸರಿಹೊಂದುತ್ತದೆ, ಕನಿಷ್ಠ detour, ಮತ್ತು ₹1,500 ಬ್ರೋಕರ್ ಕಮಿಷನ್ ಉಳಿತಾಯವಾಗುತ್ತದೆ.` :
       `This load is a 94% match: fits your ${capacity}t capacity, minimal detour along NH-48, and saves ₹1,500 in broker fees.`;
+  } else if (lower.includes('next week') || lower.includes('ಮುಂದಿನ ವಾರ') || lower.includes('ಮುಂದೆ') || lower.includes('future') || lower.includes('predict') || lower.includes('reach') || lower.includes('ಹೋಗ್ತೀನಿ') || lower.includes('ತಲುಪುತ್ತೇನೆ') || lower.includes('ಯಾವ ಲೋಡ್ ಇದೆ')) {
+    intent = 'PREDICT_FUTURE_BACKHAUL';
+    agentic_steps = [
+      `Forward Trip Target: ${location} ➔ ${destination}`,
+      `Predicting truck availability at: ${destination}`,
+      'Scanning 30-day future harvest & return freight pipeline',
+      'Calculated 94% Predictive Backhaul Score (Fertilizer, 8.2T)'
+    ];
+    reply = isKn ?
+      `ನಿಮ್ಮ ಗಾಡಿ ${destination} ತಲುಪುವ ವೇಳೆಗೆ ಹುಬ್ಬಳ್ಳಿಗೆ ವಾಪಸ್ ಬರಲು 3 ಸಂಭಾವ್ಯ ಲೋಡ್‌ಗಳಿವೆ. ರಸಗೊಬ್ಬರ (8.2 ಟನ್) ₹14,800 ಆದಾಯದೊಂದಿಗೆ 94% ಹೊಂದಾಣಿಕೆಯಾಗಿದೆ.` :
+      `When your truck reaches ${destination}, 3 future return loads are predicted back to Hubballi. Top match: Fertilizer (8.2t) with ₹14,800 revenue (94% score).`;
   } else {
     intent = 'FIND_OUTBOUND_LOAD';
     agentic_steps = [
@@ -174,6 +185,7 @@ Extract structured logistics information. Do NOT calculate distance, fuel, prici
 
 Supported Intents:
 - "FIND_OUTBOUND_LOAD": Driver wants an outbound/return load from APMC Amargol or nearby.
+- "PREDICT_FUTURE_BACKHAUL": Driver or farmer mentions a future journey/trip (e.g. "I'll reach Bengaluru next week", "ಮುಂದಿನ ವಾರ ಬೆಂಗಳೂರಿಗೆ ಹೋಗ್ತೀನಿ", "Bengaluru inda Hubballige yava load ide?") to predict return loads before getting empty.
 - "ACCEPT_MATCH": Driver wants to accept/confirm a recommended load ("ಸರಕು ಸ್ವೀಕರಿಸಿ", "accept load").
 - "EXPLAIN_BEST": Driver asks why a load is best or which is best.
 - "SHOW_PROFIT": Driver asks about profits/earnings.
