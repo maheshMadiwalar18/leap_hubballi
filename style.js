@@ -1180,9 +1180,17 @@ function setAuthMode(m) {
   $('authSwitch').textContent = m === 'login' ? 'Sign up' : 'Log in';
   $('authName').hidden = m === 'login'; $('authForgot').hidden = m !== 'login'; $('authErr').textContent = '';
 }
-function needFb() { if (fbm) return true; $('authErr').textContent = 'Sign-in service is unavailable (offline?). Use “Continue offline in demo mode”.'; return false; }
+async function needFb() {
+  if (fbm) return true;
+  $('authInfo').textContent = 'Connecting to authentication service...';
+  await loadFirebase();
+  if (fbm) { $('authInfo').textContent = ''; return true; }
+  $('authErr').textContent = 'Sign-in service is currently unreachable. Please use Instant Demo Login or check your internet connection.';
+  return false;
+}
 $('authForm').addEventListener('submit', async e => {
-  e.preventDefault(); if (!needFb()) return;
+  e.preventDefault();
+  const ok = await needFb(); if (!ok) return;
   const email = $('authEmail').value.trim(), pass = $('authPass').value;
   $('authErr').textContent = ''; $('authInfo').textContent = ''; authBusy(true);
   try {
@@ -1195,13 +1203,27 @@ $('authForm').addEventListener('submit', async e => {
   authBusy(false);
 });
 $('authGoogle').addEventListener('click', async () => {
-  if (!needFb()) return; $('authErr').textContent = ''; authBusy(true);
-  try { await fbm.signInWithPopup(fbAuth, new fbm.GoogleAuthProvider()); } catch (err) { authErr(err); }
+  const ok = await needFb(); if (!ok) return;
+  $('authErr').textContent = ''; authBusy(true);
+  try {
+    const provider = new fbm.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    await fbm.signInWithPopup(fbAuth, provider);
+  } catch (err) {
+    if (err.code === 'auth/popup-closed-by-user') {
+      $('authErr').textContent = 'Google sign-in popup was closed.';
+    } else if (err.code === 'auth/unauthorized-domain') {
+      $('authErr').textContent = 'Domain not authorized in Firebase Console. You can use Instant Demo Login.';
+    } else {
+      authErr(err);
+    }
+  }
   authBusy(false);
 });
 $('authSwitch').addEventListener('click', () => setAuthMode(authMode === 'login' ? 'signup' : 'login'));
 $('authForgot').addEventListener('click', async () => {
-  if (!needFb()) return; const email = $('authEmail').value.trim();
+  const ok = await needFb(); if (!ok) return;
+  const email = $('authEmail').value.trim();
   if (!email) { $('authErr').textContent = 'Enter your email first.'; return; }
   try { await fbm.sendPasswordResetEmail(fbAuth, email); $('authErr').textContent = ''; $('authInfo').textContent = 'Password reset email sent.'; } catch (err) { authErr(err); }
 });
@@ -1210,16 +1232,22 @@ function onFbUser(user) {
   if (user) {
     if (session && session.userId === user.uid) { if (!appOpen) enterApp(); }
     else if (!session) { $('authForm').reset(); showProfile(user); }
-    else if (!isOffline(session)) { signOutLocal(); showProfile(user); }   // a different Firebase user
-  } else if (session && !isOffline(session) && appOpen) signOutLocal();    // signed out elsewhere
+    else if (!isOffline(session)) { signOutLocal(); showProfile(user); }
+  } else if (session && !isOffline(session) && appOpen) signOutLocal();
 }
 async function loadFirebase() {
+  if (fbm) return fbm;
   try {
     const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
     const [a, au] = await Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js')]);
     fbm = au; fbAuth = au.getAuth(a.initializeApp(FB_CONFIG));
     au.onAuthStateChanged(fbAuth, onFbUser);
-  } catch (e) { fbm = null; $('authInfo').textContent = 'Offline: sign-in service unavailable. You can still use demo mode.'; }
+    return fbm;
+  } catch (e) {
+    console.warn('[Firebase] load failed:', e);
+    fbm = null;
+    return null;
+  }
 }
 
 function initApp() {
