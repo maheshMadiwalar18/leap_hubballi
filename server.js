@@ -20,9 +20,6 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-let faceService = null;
-try { faceService = require('./face-service'); } catch (e) { console.warn('[Face] disabled:', e.message); }
-
 let predictiveEngine = null;
 try { predictiveEngine = require('./predictive-engine'); } catch (e) { console.warn('[Predictive Engine] disabled:', e.message); }
 
@@ -385,11 +382,6 @@ const server = http.createServer((req, res) => {
         return res.end(JSON.stringify({ success: true, source: 'fallback', data: fb }));
       }
     });
-    return;
-  }
-
-  if (faceService && pathname.startsWith('/api/face/')) {
-    faceService.handle(req, res, pathname).catch(() => { if (!res.headersSent) { res.writeHead(500); res.end(); } });
     return;
   }
 
