@@ -964,14 +964,43 @@ function addTruck(e) {
   saveDb(); $('truckForm').reset(); renderTrucks(); toast('Truck added');
 }
 function renderHistory() {
-  const st = $('hStatus').value, from = $('hFrom').value, to = $('hTo').value, sort = $('hSort').value;
-  let rows = db.trips.slice();
-  if (db.active) rows.push({ route: db.active.from + ' → ' + db.active.to, date: todayStr(), status: 'In transit', earn: db.active.price, km: db.active.km, fuel: db.active.fuel, util: db.active.util });
-  rows = rows.filter(t => (!st || t.status === st) && (!from || t.date >= from) && (!to || t.date <= to));
+  const st = $('hStatus') ? $('hStatus').value : '',
+        from = $('hFrom') ? $('hFrom').value : '',
+        to = $('hTo') ? $('hTo').value : '',
+        sort = $('hSort') ? $('hSort').value : 'date';
+  let rows = (db && db.trips) ? db.trips.slice() : [];
+  if (db && db.active) {
+    rows.push({
+      route: db.active.from + ' → ' + db.active.to,
+      date: todayStr(),
+      status: 'In transit',
+      earn: db.active.price,
+      km: db.active.km,
+      fuel: db.active.fuel,
+      util: db.active.util
+    });
+  }
+  rows = rows.filter(trip => (!st || trip.status === st) && (!from || trip.date >= from) && (!to || trip.date <= to));
   rows.sort((a, b) => sort === 'earnDesc' ? b.earn - a.earn : sort === 'earnAsc' ? a.earn - b.earn : b.date.localeCompare(a.date));
   put('histCount', `(${rows.length})`);
-  put('histRows', rows.map(t => `<tr><td>${t.date}</td><td>${t.route.split(' → ').map(cityName).join(' → ')}</td><td><span class="badge ${LOAD_BADGE[t.status]}">${t('status.' + t.status)}</span></td>
-    <td>${tn(t.km)} ${t('table.km').split(' ')[0]}</td><td>${tn(t.fuel)} L</td><td>${t.util}%</td><td>${inr(t.earn)}</td></tr>`).join('') || '<tr><td colspan="7" class="hint">No trips match these filters.</td></tr>');
+  
+  const kmHeader = typeof t === 'function' ? (t('table.km') || 'km') : 'km';
+  const kmUnit = kmHeader.split(' ')[0] || 'km';
+
+  put('histRows', rows.map(trip => {
+    const statusText = typeof t === 'function' ? (t('status.' + trip.status) || trip.status) : trip.status;
+    const badgeCls = (LOAD_BADGE && LOAD_BADGE[trip.status]) || 'b-matched';
+    const routeText = trip.route ? trip.route.split(' → ').map(cityName).join(' → ') : 'Hubballi';
+    return `<tr>
+      <td><strong>${trip.date}</strong></td>
+      <td><span class="route-pill">${routeText}</span></td>
+      <td><span class="badge ${badgeCls}">${statusText}</span></td>
+      <td>${tn(trip.km)} ${kmUnit}</td>
+      <td>${tn(trip.fuel)} L</td>
+      <td><span class="util-badge ${trip.util >= 75 ? 'util-high' : 'util-normal'}">${trip.util}%</span></td>
+      <td><strong style="color:var(--color-primary, #003366);font-size:15px;">${inr(trip.earn)}</strong></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" class="hint" style="text-align:center;padding:32px 16px;color:#64748B;">No trips match these filters.</td></tr>');
 }
 function weeklyData() {
   const w = Array.from({ length: 6 }, () => ({ earn: 0, km: 0 })), now = new Date(todayStr());
