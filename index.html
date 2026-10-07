@@ -3,102 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BACKHAUL AI – Voice-First Outbound Load Matching for APMC Amargol</title>
-<meta name="description" content="BackHaul AI matches empty return trucks with nearby freight at APMC Amargol, Hubballi through natural Kannada voice. Zero broker commission, transparent pricing.">
+<title>BackHaul AI – Voice-First Return-Load Intelligence Platform | APMC Amargol, Hubballi</title>
+<meta name="description" content="BackHaul AI matches empty return trucks with outbound freight at APMC Amargol, Hubballi with voice-first intelligence, zero broker fees, and transparent pricing.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
-<link rel="stylesheet" href="face-login.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="face-login.css?v=14">
 </head>
 <body>
 
+<!-- AUTHENTICATION OVERLAY (2-COLUMN B2B SAAS LAYOUT) -->
 <div class="ov" id="authOverlay">
-  <div class="lang-toggle-abs" id="authLang"></div>
-  <div class="ov-card" id="authCard">
-    <div class="a-brand">BackHaul AI</div>
-    <div style="font-size:11px; font-weight:800; color:#12805c; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">LEAP Hackathon · PS 1A Smart Logistics</div>
-    <h2 id="authTitle" data-i18n="auth.titleLogin">Welcome back</h2>
-    <form id="authForm">
-      <input id="authName" type="text" placeholder="Full name" data-i18n-placeholder="auth.nameHolder" autocomplete="name" hidden>
-      <input id="authEmail" type="email" placeholder="Email" data-i18n-placeholder="auth.emailHolder" autocomplete="email" required>
-      <input id="authPass" type="password" placeholder="Password" data-i18n-placeholder="auth.passHolder" autocomplete="current-password" minlength="6" required>
-      <div id="authErr" class="a-err"></div><div id="authInfo" class="a-info"></div>
-      <button class="a-btn" id="authSubmit" type="submit" data-i18n="auth.loginBtn">Log in</button>
-    </form>
-    <div class="a-or" data-i18n="auth.or">or</div>
-    <button class="a-btn a-google" id="authGoogle" type="button" data-i18n="auth.googleBtn">Continue with Google</button>
-    <button class="a-btn" id="authOneClickDemo" type="button" style="background:#12805c;color:#fff;margin-top:8px;font-weight:700;">⚡ Instant 1-Click Demo Login</button>
-    <div class="a-foot">
-      <span id="authSwitchText" data-i18n="auth.noAccount"></span> <button class="a-link" id="authSwitch" type="button"></button><br>
-      <button class="a-link" id="authForgot" type="button" data-i18n="auth.forgotBtn">Forgot password?</button>
+  <div class="auth-split-wrapper">
+    <!-- LEFT BRAND & REAL APMC SCENARIO PANE -->
+    <div class="auth-hero-pane">
+      <div class="auth-hero-top">
+        <div class="auth-brand-badge">📍 APMC AMARGOL, HUBBALLI · PS 1A SMART LOGISTICS</div>
+        <div class="auth-brand-title">
+          <span class="brand-text">BackHaul<span class="brand-dot">AI</span></span>
+          <span class="brand-subtag">+ ಸಾರಥಿ AI</span>
+        </div>
+        <p class="auth-hero-tagline">Turn empty return trips into profitable journeys.</p>
+      </div>
+
+      <!-- REAL SCENARIO GROUND PHOTO CARD -->
+      <div class="auth-photo-card">
+        <img src="apmc_hubballi_yard.jpg" alt="APMC Amargol Wholesale Yard Hubballi" class="auth-scenario-img">
+        <div class="auth-photo-overlay">
+          <div class="auth-photo-badge">
+            <span class="live-dot"></span>
+            <span>Live Mandi Dispatch · APMC Amargol Yard</span>
+          </div>
+          <p class="auth-photo-caption">Matching unloaded trucks directly with outgoing onion and agricultural consignments before empty highway departures.</p>
+        </div>
+      </div>
+
+      <!-- PRACTICAL GROUND VALUE HIGHLIGHTS -->
+      <div class="auth-ground-metrics">
+        <div class="ground-metric-item">
+          <div class="metric-icon-box">₹0</div>
+          <div class="metric-text">
+            <strong>Zero Dalali (0% Broker Fee)</strong>
+            <span>Transparent pricing with direct consignor settlement</span>
+          </div>
+        </div>
+        <div class="ground-metric-item">
+          <div class="metric-icon-box">🎙️</div>
+          <div class="metric-text">
+            <strong>Kannada Voice (ಸಾರಥಿ)</strong>
+            <span>Hands-free WhatsApp & speech return-trip booking</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-yard-pill">
+        <span class="live-dot"></span>
+        <span><b>347+ Trucks</b> Arrived Today · <b>197 Matched</b> · 38% → 16% Empty Returns</span>
+      </div>
+    </div>
+
+    <!-- RIGHT AUTHENTICATION CARD PANE -->
+    <div class="auth-form-pane">
+      <div class="lang-toggle-abs" id="authLang"></div>
+      <div class="ov-card" id="authCard">
+        <div class="card-header-compact">
+          <div class="a-brand">BackHaul <span style="color:var(--color-accent)">AI</span></div>
+          <div class="a-badge-sub">Sign in to your account</div>
+        </div>
+        <h2 id="authTitle" data-i18n="auth.titleLogin">Welcome back</h2>
+        
+        <form id="authForm" autocomplete="on">
+          <div class="form-group">
+            <input id="authName" type="text" placeholder="Full name" data-i18n-placeholder="auth.nameHolder" autocomplete="name" hidden>
+          </div>
+          <div class="form-group">
+            <label for="authEmail" class="form-label">Email address</label>
+            <input id="authEmail" type="email" placeholder="name@company.com" data-i18n-placeholder="auth.emailHolder" autocomplete="email" required>
+          </div>
+          <div class="form-group">
+            <label for="authPass" class="form-label">Password</label>
+            <input id="authPass" type="password" placeholder="••••••••" data-i18n-placeholder="auth.passHolder" autocomplete="current-password" minlength="6" required>
+          </div>
+          <div id="authErr" class="a-err" role="alert"></div>
+          <div id="authInfo" class="a-info" role="status"></div>
+          <button class="a-btn a-btn-primary" id="authSubmit" type="submit" data-i18n="auth.loginBtn">Log in</button>
+        </form>
+
+        <div class="a-or" data-i18n="auth.or">or continue with</div>
+        <button class="a-btn a-google" id="authGoogle" type="button" data-i18n="auth.googleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          Continue with Google
+        </button>
+        <button class="a-btn a-demo-fast" id="authOneClickDemo" type="button">
+          ⚡ 1-Click Instant Demo Login (Ramesh Patil · Transporter)
+        </button>
+
+        <div class="a-foot">
+          <span id="authSwitchText" data-i18n="auth.noAccount">Don't have an account?</span> 
+          <button class="a-link" id="authSwitch" type="button">Sign up</button>
+          <div style="margin-top:6px;">
+            <button class="a-link" id="authForgot" type="button" data-i18n="auth.forgotBtn">Forgot password?</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- PROFILE SELECTION OVERLAY -->
 <div class="ov" id="profileOverlay" hidden>
   <div class="lang-toggle-abs" id="profileLang"></div>
-  <div class="ov-card" id="profileCard">
-    <div class="a-brand">BackHaul AI</div>
-    <div style="font-size:11px; font-weight:800; color:#12805c; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">APMC Amargol, Hubballi</div>
-    <h2 data-i18n="prof.title">Choose your role</h2>
+  <div class="ov-card profile-card" id="profileCard">
+    <div class="card-header-compact">
+      <div class="a-brand">BackHaul <span style="color:var(--color-accent)">AI</span></div>
+      <div class="a-badge-sub">APMC Amargol, Hubballi</div>
+    </div>
+    <h2 data-i18n="prof.title">Choose your workspace role</h2>
     <form id="profileForm" novalidate>
-      <label><span data-i18n="prof.nameLabel">Your name / company</span><input id="pName" placeholder="e.g. Ramesh Patil" data-i18n-placeholder="prof.nameHolder" autocomplete="name"></label>
-      <label><span data-i18n="prof.roleLabel">I am a</span>
+      <div class="form-group">
+        <label for="pName"><span data-i18n="prof.nameLabel">Your name / company</span></label>
+        <input id="pName" placeholder="e.g. Ramesh Patil" data-i18n-placeholder="prof.nameHolder" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="pRole"><span data-i18n="prof.roleLabel">Operating as</span></label>
         <select id="pRole">
           <option value="" data-i18n="prof.roleSelect">Select a role…</option>
-          <option value="transporter" data-i18n="prof.roleTransporter">Transporter</option>
-          <option value="cargo_owner" data-i18n="prof.roleCargo">Cargo owner</option>
-          <option value="operator" data-i18n="prof.roleOperator">Broker-free operator</option>
+          <option value="transporter" data-i18n="prof.roleTransporter">Transporter (Driver / Fleet Owner)</option>
+          <option value="cargo_owner" data-i18n="prof.roleCargo">Cargo Owner (Trader / Shipper)</option>
+          <option value="operator" data-i18n="prof.roleOperator">Broker-Free Operator (APMC Desk)</option>
         </select>
-      </label>
-      <label><span data-i18n="prof.cityLabel">Base location (optional)</span><input id="pCity" list="cities" placeholder="e.g. Hubballi" data-i18n-placeholder="prof.cityHolder"></label>
-      <p class="hint" data-i18n="prof.hint">Your role is fixed for this session. To use another role, sign out and sign in again.</p>
-      <div id="pErr" class="a-err"></div>
-      <button class="a-btn" type="submit" data-i18n="prof.submit">Open my dashboard</button>
+      </div>
+      <div class="form-group">
+        <label for="pCity"><span data-i18n="prof.cityLabel">Base location</span></label>
+        <input id="pCity" list="cities" placeholder="e.g. Hubballi" data-i18n-placeholder="prof.cityHolder">
+      </div>
+      <p class="hint" data-i18n="prof.hint">Your role configures the workflow and permissions for this active session.</p>
+      <div id="pErr" class="a-err" role="alert"></div>
+      <button class="a-btn a-btn-primary" type="submit" data-i18n="prof.submit">Open Workspace</button>
     </form>
-    <div class="a-or" data-i18n="prof.demoOr">or one-click demo</div>
-    <div class="demo-row" style="grid-template-columns:1fr">
-      <button class="a-btn a-google" type="button" data-demo="ramesh" data-i18n="prof.demoRamesh">Ramesh Patil<small>Transporter · Hubballi</small></button>
+    <div class="a-or" data-i18n="prof.demoOr">or choose quick demo profile</div>
+    <div class="demo-row" style="grid-template-columns:1fr; margin-top:10px;">
+      <button class="a-btn a-google" type="button" data-demo="ramesh" data-i18n="prof.demoRamesh">
+        <strong>Ramesh Patil</strong><small>Transporter & Fleet Owner · Hubballi</small>
+      </button>
     </div>
     <div class="a-foot"><button class="a-link" id="profileBack" type="button" data-i18n="prof.backBtn">Back to sign-in</button></div>
   </div>
 </div>
 
-<div id="userBar" hidden>
-  <nav class="ub-nav" id="navBar" aria-label="Main navigation"></nav>
+<!-- TOP APPLICATION NAVIGATION (64px STICKY DEEP NAVY) -->
+<header id="userBar" class="app-topbar" hidden>
+  <div class="topbar-left">
+    <div class="topbar-brand" onclick="showView('dashboard')" title="BackHaul AI Dashboard">
+      <div class="brand-logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B2947" stroke-width="2.5">
+          <path d="M1 3h15v13H1z"></path>
+          <path d="M16 8h4l3 3v5h-7V8z"></path>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
+      </div>
+      <div class="brand-text-wrap">
+        <span class="brand-title">BackHaul<b>AI</b></span>
+        <span class="brand-sub">APMC Amargol</span>
+      </div>
+    </div>
+    <nav class="ub-nav" id="navBar" aria-label="Primary Navigation"></nav>
+  </div>
+
   <div class="ub-right">
     <div id="ubLang"></div>
-    <span id="userName"></span><span class="role-tag" id="roleTag"></span>
+    
     <div class="ub-bell-wrap" id="bellWrap" hidden>
-      <button id="bellBtn" class="ub-bell" aria-label="Notifications" data-i18n-aria="nav.bellAria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span id="bellBadge" class="bell-badge" hidden></span></button>
+      <button id="bellBtn" class="ub-bell" aria-label="Notifications" data-i18n-aria="nav.bellAria" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span id="bellBadge" class="bell-badge" hidden></span>
+      </button>
       <div class="bell-drop" id="bellDrop" hidden>
         <div class="bell-head"><span data-i18n="nav.notifications">Notifications</span> <button class="a-link" id="bellRead" data-i18n="nav.markRead">Mark all read</button></div>
         <div id="bellList"></div>
       </div>
     </div>
-    <button id="logoutBtn" type="button" data-i18n="nav.signOut">Sign out</button>
-  </div>
-</div>
-<div id="toast" role="status" aria-live="polite" hidden></div>
-<datalist id="cities"></datalist>
 
-<header class="hero">
-  <div class="wrap">
-    <div style="display:inline-block; background:rgba(242,169,0,0.2); color:#f2a900; font-size:11px; font-weight:800; letter-spacing:0.8px; padding:4px 12px; border-radius:20px; margin-bottom:8px;">
-      LEAP HACKATHON SERIES 2026–27 · PS 1A SMART LOGISTICS
+    <div class="user-profile-badge">
+      <span class="user-avatar" id="userAvatar">U</span>
+      <div class="user-info-meta">
+        <span id="userName" class="user-name"></span>
+        <span class="role-tag" id="roleTag"></span>
+      </div>
     </div>
-    <div class="brand">BackHaul AI <span style="font-size:20px; font-weight:500; color:#f2a900;">+ ಸಾರಥಿ AI</span></div>
-    <p class="sub" data-i18n="hero.sub">Voice-first real-time outbound load matching for APMC Amargol, Hubballi.</p>
-    <p class="ps" data-i18n="hero.ps">300–500 trucks arrive daily at Amargol wholesale yard. 30–40% return empty. Saarathi AI matches outbound loads via natural Kannada voice at transparent prices with 0% broker fees.</p>
+
+    <button id="logoutBtn" class="ub-btn-logout" type="button" data-i18n="nav.signOut" title="Sign out">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+      <span>Sign out</span>
+    </button>
   </div>
 </header>
 
-<div id="viewRoot"></div>
+<!-- GLOBAL NOTIFICATIONS TOAST -->
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<datalist id="cities"></datalist>
+
+<!-- MAIN APPLICATION VIEW ROOT -->
+<main id="viewRoot"></main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="style.js?v=6"></script>
-<script src="face-login.js"></script>
+<script src="style.js?v=14"></script>
+<script src="face-login.js?v=14"></script>
 </body>
 </html>
