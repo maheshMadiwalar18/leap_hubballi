@@ -342,6 +342,19 @@ const server = http.createServer((req, res) => {
     }));
   }
 
+  if (pathname === '/api/firebase-config') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({
+      apiKey: process.env.FIREBASE_API_KEY || '',
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'curiolab-5c4cf.web.app',
+      projectId: process.env.FIREBASE_PROJECT_ID || 'curiolab-5c4cf',
+      storageBucket: 'curiolab-5c4cf.firebasestorage.app',
+      messagingSenderId: '382541354229',
+      appId: '1:382541354229:web:21f653e5a4c5d5e320a1bc',
+      measurementId: 'G-8VRJH52D8Z'
+    }));
+  }
+
   if (pathname.split('/').some(seg => seg.startsWith('.'))) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     return res.end('404 Not Found');

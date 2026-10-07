@@ -246,7 +246,6 @@ let loads = [
   { id: 15, from: 'Gadag', to: 'Hiriyur', weight: 3.0, type: 'Onion', deadline: '22:30', price: 8800 }
 ];
 let nextId = 16, selectedId = null, lastResults = [], matched = new Set(), map, layer;
-const $ = id => document.getElementById(id);
 const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
 const key = s => {
   if (!s) return null;
@@ -565,15 +564,7 @@ function initPostForm() {
 
 
 const FB_VER = '10.12.2';
-const FB_CONFIG = {
-  apiKey: 'AIzaSyBQP006Bnw25IAQND_3DDlEm3hLULOEaA4',
-  authDomain: 'curiolab-5c4cf.web.app', // firebaseapp.com is blocked on some networks; web.app serves the same handler
-  projectId: 'curiolab-5c4cf',
-  storageBucket: 'curiolab-5c4cf.firebasestorage.app',
-  messagingSenderId: '382541354229',
-  appId: '1:382541354229:web:21f653e5a4c5d5e320a1bc',
-  measurementId: 'G-8VRJH52D8Z'
-};
+let FB_CONFIG = null;
 
 const ROLE_ACCESS = Object.freeze({
   transporter: Object.freeze(['dashboard', 'yard', 'saarathi', 'driver', 'matcher', 'future_planner', 'trucks', 'history']),
@@ -1238,6 +1229,11 @@ function onFbUser(user) {
 async function loadFirebase() {
   if (fbm) return fbm;
   try {
+    if (!FB_CONFIG) {
+      const cfgRes = await fetch('/api/firebase-config', { cache: 'no-store' });
+      if (cfgRes.ok) FB_CONFIG = await cfgRes.json();
+    }
+    if (!FB_CONFIG || !FB_CONFIG.apiKey) return null;
     const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
     const [a, au] = await Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js')]);
     fbm = au; fbAuth = au.getAuth(a.initializeApp(FB_CONFIG));
