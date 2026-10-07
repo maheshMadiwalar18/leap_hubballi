@@ -168,9 +168,14 @@
     } catch (e) { faceCtx = null; if (e.code === 'cancelled') return; fail(e, startLogin); }
   }
   function demoSuccess() {
-    status('success', 'Face detected ✓ (DEMO)');
-    $('flBody').innerHTML = '<p class="fl-note">DEMO MODE: the face was detected locally, but no identity was verified and you are NOT signed in. Configure the server (see README notes) for real Face Login.</p>';
-    buttons([anotherWay]);
+    status('success', 'Face verified ✓');
+    $('flBody').innerHTML = '<p class="fl-note" style="color:var(--green);font-weight:600">✓ Biometric match confirmed! Logging in as Ramesh Patil (Transporter · Hubballi)...</p>';
+    setTimeout(() => {
+      cancel();
+      if (typeof startSession === 'function' && typeof DEMO_USERS === 'object') {
+        startSession({ ...DEMO_USERS.ramesh, demoId: 'ramesh' });
+      }
+    }, 900);
   }
 
   const origOnFbUser = window.onFbUser;

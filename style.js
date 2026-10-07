@@ -215,7 +215,8 @@ function applyStaticI18n() {
 }
 window.addEventListener('DOMContentLoaded', () => applyStaticI18n());
 
-'use strict';
+window.$ = id => document.getElementById(id);
+const $ = window.$;
 
 const CITIES = {
   'Amargol APMC, Hubballi': [15.3905, 75.0586], Hubballi: [15.3647, 75.124], Dharwad: [15.4589, 75.0078],
@@ -1094,6 +1095,11 @@ if (demoBtn) demoBtn.onclick = () => startSession({ ...DEMO_USERS.ramesh, demoId
 const offBtn = $('authOffline');
 if (offBtn) offBtn.onclick = () => startSession({ ...DEMO_USERS.ramesh, demoId: 'ramesh' });
 $('logoutBtn').onclick = () => { signOutLocal(); if (fbAuth && fbm) fbm.signOut(fbAuth).catch(() => {}); };
+window.startSession = startSession;
+window.showProfile = showProfile;
+window.showOverlay = showOverlay;
+window.DEMO_USERS = DEMO_USERS;
+window.onFbUser = onFbUser;
 
 document.addEventListener('click', e => {
   const n = e.target.closest('[data-nav]');
