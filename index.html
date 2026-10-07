@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BACKHAUL AI – Voice-First Outbound Load Matching for APMC Amargol</title>
+<meta name="description" content="BackHaul AI matches empty return trucks with nearby freight at APMC Amargol, Hubballi through natural Kannada voice. Zero broker commission, transparent pricing.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="face-login.css">
+</head>
+<body>
+
+<!-- Step 1: Firebase sign-in -->
+<div class="ov" id="authOverlay">
+  <div class="lang-toggle-abs" id="authLang"></div>
+  <div class="ov-card" id="authCard">
+    <div class="a-brand">BackHaul AI</div>
+    <div style="font-size:11px; font-weight:800; color:#12805c; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">LEAP Hackathon · PS 1A Smart Logistics</div>
+    <h2 id="authTitle" data-i18n="auth.titleLogin">Welcome back</h2>
+    <form id="authForm">
+      <input id="authName" type="text" placeholder="Full name" data-i18n-placeholder="auth.nameHolder" autocomplete="name" hidden>
+      <input id="authEmail" type="email" placeholder="Email" data-i18n-placeholder="auth.emailHolder" autocomplete="email" required>
+      <input id="authPass" type="password" placeholder="Password" data-i18n-placeholder="auth.passHolder" autocomplete="current-password" minlength="6" required>
+      <div id="authErr" class="a-err"></div><div id="authInfo" class="a-info"></div>
+      <button class="a-btn" id="authSubmit" type="submit" data-i18n="auth.loginBtn">Log in</button>
+    </form>
+    <div class="a-or" data-i18n="auth.or">or</div>
+    <button class="a-btn a-google" id="authGoogle" type="button" data-i18n="auth.googleBtn">Continue with Google</button>
+    <div class="a-foot">
+      <span id="authSwitchText" data-i18n="auth.noAccount"></span> <button class="a-link" id="authSwitch" type="button"></button><br>
+      <button class="a-link" id="authForgot" type="button" data-i18n="auth.forgotBtn">Forgot password?</button><br>
+      <button class="a-link" id="authOffline" type="button" data-i18n="auth.offlineBtn">Continue offline in demo mode</button>
+    </div>
+  </div>
+</div>
+
+<!-- Step 2: name + role. The role chosen here is locked for the whole session. -->
+<div class="ov" id="profileOverlay" hidden>
+  <div class="lang-toggle-abs" id="profileLang"></div>
+  <div class="ov-card" id="profileCard">
+    <div class="a-brand">BackHaul AI</div>
+    <div style="font-size:11px; font-weight:800; color:#12805c; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">APMC Amargol, Hubballi</div>
+    <h2 data-i18n="prof.title">Choose your role</h2>
+    <form id="profileForm" novalidate>
+      <label><span data-i18n="prof.nameLabel">Your name / company</span><input id="pName" placeholder="e.g. Ramesh Patil" data-i18n-placeholder="prof.nameHolder" autocomplete="name"></label>
+      <label><span data-i18n="prof.roleLabel">I am a</span>
+        <select id="pRole">
+          <option value="" data-i18n="prof.roleSelect">Select a role…</option>
+          <option value="transporter" data-i18n="prof.roleTransporter">Transporter</option>
+          <option value="cargo_owner" data-i18n="prof.roleCargo">Cargo owner</option>
+          <option value="operator" data-i18n="prof.roleOperator">Broker-free operator</option>
+        </select>
+      </label>
+      <label><span data-i18n="prof.cityLabel">Base location (optional)</span><input id="pCity" list="cities" placeholder="e.g. Hubballi" data-i18n-placeholder="prof.cityHolder"></label>
+      <p class="hint" data-i18n="prof.hint">Your role is fixed for this session. To use another role, sign out and sign in again.</p>
+      <div id="pErr" class="a-err"></div>
+      <button class="a-btn" type="submit" data-i18n="prof.submit">Open my dashboard</button>
+    </form>
+    <div class="a-or" data-i18n="prof.demoOr">or one-click demo</div>
+    <div class="demo-row">
+      <button class="a-btn a-google" type="button" data-demo="ramesh" data-i18n="prof.demoRamesh">Ramesh Patil<small>Transporter · Hubballi</small></button>
+      <button class="a-btn a-google" type="button" data-demo="kisan" data-i18n="prof.demoKisan">Kisan Agro Traders<small>Cargo owner · Amargol APMC</small></button>
+      <button class="a-btn a-google" type="button" data-demo="yard" data-i18n="prof.demoYard">Amargol Yard Desk<small>Operator · Amargol APMC</small></button>
+    </div>
+    <div class="a-foot"><button class="a-link" id="profileBack" type="button" data-i18n="prof.backBtn">Back to sign-in</button></div>
+  </div>
+</div>
+
+<div id="userBar" hidden>
+  <nav class="ub-nav" id="navBar" aria-label="Main navigation"></nav>
+  <div class="ub-right">
+    <div id="ubLang"></div>
+    <span id="userName"></span><span class="role-tag" id="roleTag"></span>
+    <div class="ub-bell-wrap" id="bellWrap" hidden>
+      <button id="bellBtn" class="ub-bell" aria-label="Notifications" data-i18n-aria="nav.bellAria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span id="bellBadge" class="bell-badge" hidden></span></button>
+      <div class="bell-drop" id="bellDrop" hidden>
+        <div class="bell-head"><span data-i18n="nav.notifications">Notifications</span> <button class="a-link" id="bellRead" data-i18n="nav.markRead">Mark all read</button></div>
+        <div id="bellList"></div>
+      </div>
+    </div>
+    <button id="logoutBtn" type="button" data-i18n="nav.signOut">Sign out</button>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<datalist id="cities"></datalist>
+
+<header class="hero">
+  <div class="wrap">
+    <div style="display:inline-block; background:rgba(242,169,0,0.2); color:#f2a900; font-size:11px; font-weight:800; letter-spacing:0.8px; padding:4px 12px; border-radius:20px; margin-bottom:8px;">
+      LEAP HACKATHON SERIES 2026–27 · PS 1A SMART LOGISTICS
+    </div>
+    <div class="brand">BackHaul AI <span style="font-size:20px; font-weight:500; color:#f2a900;">+ ಸಾರಥಿ AI</span></div>
+    <p class="sub" data-i18n="hero.sub">Voice-first real-time outbound load matching for APMC Amargol, Hubballi.</p>
+    <p class="ps" data-i18n="hero.ps">300–500 trucks arrive daily at Amargol wholesale yard. 30–40% return empty. Saarathi AI matches outbound loads via natural Kannada voice at transparent prices with 0% broker fees.</p>
+  </div>
+</header>
+
+<!-- The current role's view is rendered here. Other roles' views are never put in the DOM. -->
+<div id="viewRoot"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="style.js?v=6"></script>
+<script src="face-login.js"></script>
+</body>
+</html>

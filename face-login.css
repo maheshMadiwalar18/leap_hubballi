@@ -1,0 +1,48 @@
+/* Face Login add-on styles (isolated; prefixed fl- / a-face) */
+.fl-entry { margin-top: 2px; }
+.a-face { background: linear-gradient(135deg, #0b2a3d, #12805c); color: #fff; border: 0; }
+.a-face:hover { filter: brightness(1.12); }
+#faceSettingsBtn { background: transparent; border: 1px solid rgba(255,255,255,.35); color: inherit; border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; font-size: 13px; margin-right: 6px; }
+#faceSettingsBtn:hover { background: rgba(255,255,255,.12); }
+
+.fl-ov { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: radial-gradient(circle at 30% 20%, rgba(18,128,92,.35), transparent 55%), rgba(6,18,28,.88); backdrop-filter: blur(8px); }
+.fl-ov[hidden] { display: none; }
+.fl-card { width: min(420px, 100%); max-height: 94vh; overflow-y: auto; text-align: center; color: #e8f3ef;
+  background: linear-gradient(180deg, #0f2a3a, #0a1b27); border: 1px solid rgba(255,255,255,.1); border-radius: 22px; padding: 22px 20px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.55); }
+.fl-card h2 { margin: 0 0 12px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; }
+.fl-demo { background: #f2a900; color: #1a1200; font-weight: 800; font-size: 11px; letter-spacing: .6px; padding: 6px 10px; border-radius: 8px; margin-bottom: 10px; }
+.fl-stage { position: relative; width: 250px; height: 250px; margin: 6px auto 14px; border-radius: 50%; overflow: hidden; background: #000; }
+.fl-stage[hidden] { display: none; }
+.fl-stage video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+.fl-ring { position: absolute; inset: 0; border-radius: 50%; border: 4px solid rgba(255,255,255,.55); box-shadow: inset 0 0 0 9999px rgba(6,18,28,.18); transition: border-color .3s, box-shadow .3s; }
+.fl-scan { position: absolute; left: 8%; right: 8%; height: 3px; top: 10%; border-radius: 3px; opacity: 0;
+  background: linear-gradient(90deg, transparent, #3ef0b0, transparent); }
+[data-state="detecting"] .fl-ring, [data-state="live"] .fl-ring { border-color: #f2a900; }
+[data-state="live"] .fl-ring { animation: fl-pulse 1s infinite; }
+[data-state="verifying"] .fl-ring { border-color: #3ef0b0; }
+[data-state="verifying"] .fl-scan { opacity: 1; animation: fl-scan 1.2s ease-in-out infinite; }
+[data-state="success"] .fl-ring { border-color: #3ef0b0; box-shadow: 0 0 30px #3ef0b0 inset; }
+[data-state="fail"] .fl-ring { border-color: #ff5a5a; }
+@keyframes fl-scan { 0% { top: 10%; } 50% { top: 86%; } 100% { top: 10%; } }
+@keyframes fl-pulse { 50% { box-shadow: 0 0 0 6px rgba(242,169,0,.25); } }
+.fl-status { min-height: 24px; font-weight: 600; font-size: 16px; margin-bottom: 8px; }
+[data-state="success"] .fl-status { color: #3ef0b0; }
+[data-state="fail"] .fl-status { color: #ff8a8a; }
+.fl-body { font-size: 14px; line-height: 1.5; text-align: left; }
+.fl-body p { margin: 6px 0; }
+.fl-h3 { margin: 4px 0; font-size: 17px; }
+.fl-fine { font-size: 12px; opacity: .75; }
+.fl-note { font-size: 12.5px; background: rgba(242,169,0,.14); border-left: 3px solid #f2a900; padding: 8px 10px; border-radius: 6px; }
+.fl-state { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.fl-check { display: flex; gap: 8px; align-items: center; font-weight: 700; font-size: 16px; }
+.fl-check input { width: 20px; height: 20px; }
+.fl-welcome { text-align: center; font-size: 18px; line-height: 1.8; }
+.fl-welcome .fl-hi { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+.fl-btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+.fl-btn { flex: 1 1 auto; min-height: 46px; padding: 10px 16px; border-radius: 12px; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+  color: #05140f; background: linear-gradient(135deg, #3ef0b0, #12c48a); }
+.fl-btn.ghost { background: transparent; color: #e8f3ef; border: 1px solid rgba(255,255,255,.3); }
+.fl-btn:disabled { opacity: .4; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .fl-scan, .fl-ring { animation: none !important; } }
