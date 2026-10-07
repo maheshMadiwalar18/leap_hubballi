@@ -156,7 +156,6 @@ const CARGO_KN = {
 };
 
 let LANG = window.localStorage.getItem('bh_lang') || (navigator.language.startsWith('kn') ? 'kn' : 'en');
-let DRIVER_MODE = window.localStorage.getItem('bh_driver_mode') === 'true';
 let SHOW_KN_DIGITS = false;
 
 function t(key, vars = {}) {
@@ -219,22 +218,6 @@ function setLang(lang) {
   }
 }
 
-function toggleDriverMode() {
-  DRIVER_MODE = !DRIVER_MODE;
-  window.localStorage.setItem('bh_driver_mode', DRIVER_MODE);
-  applyDriverMode();
-  applyStaticI18n();
-}
-
-function applyDriverMode() {
-  document.body.classList.toggle('driver-mode', DRIVER_MODE);
-  document.querySelectorAll('.driver-mode-pill').forEach(b => {
-    b.classList.toggle('active', DRIVER_MODE);
-    b.setAttribute('aria-pressed', DRIVER_MODE);
-    const st = b.querySelector('.driver-status');
-    if (st) st.textContent = DRIVER_MODE ? 'ON' : 'OFF';
-  });
-}
 
 function applyStaticI18n() {
   document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
@@ -245,12 +228,7 @@ function applyStaticI18n() {
     <div class="lang-segmented" role="group" aria-label="Language / ಭಾಷೆ">
       <button type="button" class="lang-seg-btn ${LANG==='en'?'active':''}" aria-pressed="${LANG==='en'}" onclick="setLang('en')" title="English">EN</button>
       <button type="button" class="lang-seg-btn ${LANG==='kn'?'active':''}" aria-pressed="${LANG==='kn'}" onclick="setLang('kn')" title="ಕನ್ನಡ">ಕನ್ನಡ</button>
-    </div>
-    <button type="button" class="driver-mode-pill ${DRIVER_MODE?'active':''}" onclick="toggleDriverMode()" aria-pressed="${DRIVER_MODE}" title="Toggle Hands-free Driver Mode">
-      <span class="driver-dot"></span>
-      <span class="driver-text">${t('driver.toggle') || 'Driver Mode'}</span>
-      <span class="driver-status">${DRIVER_MODE ? 'ON' : 'OFF'}</span>
-    </button>`;
+    </div>`;
   const ub = document.getElementById('ubLang'), al = document.getElementById('authLang'), pl = document.getElementById('profileLang');
   if (ub) ub.innerHTML = ui; if (al) al.innerHTML = ui; if (pl) pl.innerHTML = ui;
   
@@ -259,7 +237,6 @@ function applyStaticI18n() {
       $('cities').innerHTML = Object.keys(CITIES).map(c => `<option value="${c}">${cityName(c)}</option>`).join('');
     }
   }
-  applyDriverMode();
   updateTopbarProfile();
 }
 window.addEventListener('DOMContentLoaded', () => applyStaticI18n());
