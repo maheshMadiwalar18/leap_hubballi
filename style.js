@@ -780,13 +780,103 @@ const matcherHtml = () => `
 const dealsTable = () => `<div class="tablewrap"><table>
   <thead><tr><th>Date</th><th>Route</th><th>Price</th><th>Commission saved</th></tr></thead><tbody id="dealRows"></tbody></table></div>`;
 
+function dashboardRoadmapHtml() {
+  const isKn = (typeof LANG !== 'undefined' && LANG === 'kn');
+  return `
+    <div class="panel dashboard-roadmap-panel mt">
+      <div class="roadmap-header">
+        <div class="rmh-badge">
+          <span class="live-dot-pulse"></span>
+          <span>${isKn ? 'ಭವಿಷ್ಯದ ತಂತ್ರಜ್ಞಾನ ಯೋಜನೆ' : 'STRATEGIC ROADMAP & VISION'}</span>
+        </div>
+        <h2>${isKn ? 'ಕರ್ನಾಟಕ ಸರಕು ಸಾಗಣೆ ವಿಸ್ತರಣೆ ಮತ್ತು ಭವಿಷ್ಯದ ಯೋಜನೆಗಳು' : 'Karnataka Rural & APMC Freight Expansion Roadmap'}</h2>
+        <p class="rmh-sub">
+          ${isKn ?
+            'ಹುಬ್ಬಳ್ಳಿ-ಧಾರವಾಡ, ತಾಲೂಕು ಕೇಂದ್ರಗಳು ಮತ್ತು ಕರ್ನಾಟಕದ ಹಳ್ಳಿಗಳನ್ನು ಸಂಪರ್ಕಿಸುವ ಮುಂಬರುವ ಪ್ರಮುಖ ಸೌಲಭ್ಯಗಳು' :
+            'Upcoming enterprise capabilities connecting APMC mandis, rural taluks, and farm-gate supply chains across Karnataka'
+          }
+        </p>
+      </div>
+
+      <div class="roadmap-grid">
+        <div class="roadmap-card">
+          <div class="rm-card-icon bg-blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <div class="rm-card-body">
+            <span class="rm-phase phase-q1">Q1 2027 · IN DEVELOPMENT</span>
+            <h4>${isKn ? '1-ಕ್ಲಿಕ್ ಇ-ವೇ ಬಿಲ್ (e-Way Bill Integration)' : '1-Click e-Way Bill & GST Integration'}</h4>
+            <p>${isKn ? 'GST & NIC e-Way Bill ಪೋರ್ಟಲ್ ಜತೆ ನೇರ ಸಂಪರ್ಕ. ಚೆಕ್‌ಪೋಸ್ಟ್ ಮತ್ತು APMC ಗೇಟ್‌ಗಳಲ್ಲಿ ಕಾಗದರಹಿತ ತ್ವರಿತ ಪರಿಶೀಲನೆ.' : 'Direct GST & NIC portal API integration. Generates and verifies digital e-Way bills in seconds with automated QR codes for seamless highway transit.'}</p>
+          </div>
+        </div>
+
+        <div class="roadmap-card">
+          <div class="rm-card-icon bg-green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          </div>
+          <div class="rm-card-body">
+            <span class="rm-phase phase-q1">Q1 2027 · ROLLING OUT</span>
+            <h4>${isKn ? 'ಗ್ರಾಮೀಣ ಫೀಡರ್ ಜಾಲ (Rural Feeder Hubs)' : 'Rural Feeder Hubs & Taluk Mandis'}</h4>
+            <p>${isKn ? 'ಬ್ಯಾಡಗಿ, ಕುಂದಗೋಳ, ಅಣ್ಣಿಗೇರಿ, ನವಲಗುಂದ, ಕಲ್ಘಟಗಿ ಮುಂತಾದ ತಾಲೂಕುಗಳಿಂದ ನೇರವಾಗಿ ಅಮರಗೋಳ ಮಂಡಿಗೆ ಸರಕು ಸಂಗ್ರಹಣೆ.' : 'Micro-aggregation nodes connecting agricultural producers in Byadagi, Annigeri, Kundgol, and Navalgund directly to return-trip trucks.'}</p>
+          </div>
+        </div>
+
+        <div class="roadmap-card">
+          <div class="rm-card-icon bg-amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div class="rm-card-body">
+            <span class="rm-phase phase-q2">Q2 2027 · PLANNED</span>
+            <h4>${isKn ? 'ವಾಟ್ಸಾಪ್ & IVR ವಾಯ್ಸ್ ಬೋಟ್ (WhatsApp & IVR Bot)' : 'Mandi WhatsApp Bot & IVR Dial-in'}</h4>
+            <p>${isKn ? 'ಸ್ಮಾರ್ಟ್‌ಫೋನ್ ಇಲ್ಲದ ಚಾಲಕರಿಗೆ ನೇರ ಫೋನ್ ಕರೆ (IVR) ಮತ್ತು ವಾಟ್ಸಾಪ್ ಸಂದೇಶದ ಮೂಲಕ ಸರಕು ಬುಕಿಂಗ್ ವ್ಯವಸ್ಥೆ.' : 'Zero-app WhatsApp voice messaging and automated phone dial-in for non-smartphone drivers in North Karnataka regional dialects.'}</p>
+          </div>
+        </div>
+
+        <div class="roadmap-card">
+          <div class="rm-card-icon bg-purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          </div>
+          <div class="rm-card-body">
+            <span class="rm-phase phase-q2">Q2 2027 · PLANNED</span>
+            <h4>${isKn ? 'ಫಾಸ್ಟ್ಯಾಗ್ & ಟೋಲ್ ಆಟೊಮೇಷನ್ (FASTag & Toll Sync)' : 'FASTag & Fuel Cost Automation'}</h4>
+            <p>${isKn ? 'NH-48 ಹೈವೆ ಟೋಲ್ ವೆಚ್ಚದ ಲೈವ್ ಲೆಕ್ಕಾಚಾರ, FASTag ಬ್ಯಾಲೆನ್ಸ್ ಎಚ್ಚರಿಕೆ ಮತ್ತು ನಿಖರ ಇಂಧನ ಉಳಿತಾಯ ಲೆಕ್ಕಾಚಾರ.' : 'Live NH-48 toll plaza fee forecasting, FASTag wallet synchronization, and dynamic fuel surcharge tracking.'}</p>
+          </div>
+        </div>
+
+        <div class="roadmap-card">
+          <div class="rm-card-icon bg-cyan">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <div class="rm-card-body">
+            <span class="rm-phase phase-q3">Q3 2027 · UPCOMING</span>
+            <h4>${isKn ? 'ಸುಲಭ ವಾಹನ್ & ಕೆವೈಸಿ (Instant VAHAN KYC)' : 'Instant VAHAN & DigiLocker KYC'}</h4>
+            <p>${isKn ? 'ವಾಹನ್ ಡೇಟಾಬೇಸ್ ಜತೆ ಸಂಪರ್ಕ. ಗಾಡಿ ನಂಬರ್ ನಮೂದಿಸಿದ 10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಆರ್ ಸಿ, ಫಿಟ್ನೆಸ್ ಮತ್ತು ಇನ್ಶೂರೆನ್ಸ್ ಆನ್‌ಬೋರ್ಡಿಂಗ್.' : 'Automated 10-second verification of vehicle RC, fitness certificate, and national permit via Government VAHAN database.'}</p>
+          </div>
+        </div>
+
+        <div class="roadmap-card">
+          <div class="rm-card-icon bg-emerald">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+          </div>
+          <div class="rm-card-body">
+            <span class="rm-phase phase-q3">Q3 2027 · UPCOMING</span>
+            <h4>${isKn ? 'ಶೀತಲ ಸರಪಳಿ ಕಾರಿಡಾರ್ (Cold-Chain Priority)' : 'Cold-Chain & Perishable Express'}</h4>
+            <p>${isKn ? 'ವಿಜಯಪುರ ದ್ರಾಕ್ಷಿ, ಬಾಗಲಕೋಟೆ ದಾಳಿಂಬೆ ಮತ್ತು ತರಕಾರಿಗಳಿಗೆ ತಾಪಮಾನ ಟ್ರ್ಯಾಕಿಂಗ್ ಜತೆ ಆದ್ಯತೆಯ ಎಕ್ಸ್‌ಪ್ರೆಸ್ ಹೊಂದಾಣಿಕೆ.' : 'IoT reefer temperature monitoring and priority return-load booking for horticultural produce across North Karnataka.'}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 const TEMPLATES = {
   'transporter/dashboard': () => `<div id="alertBox"></div><div id="tKpis" class="dkpis"></div>
     <div class="grid2 even">
       <div class="panel"><h2>${t('title.active')}</h2><div id="activeBox"></div></div>
       <div class="panel"><h2>${t('title.chart')}</h2>
         <div class="chartbox"><canvas id="chart" role="img" aria-label="Weekly earnings and empty km avoided chart"></canvas></div><div id="chartFallback" hidden></div></div>
-    </div>`,
+    </div>
+    ${dashboardRoadmapHtml()}`,
   'transporter/future_planner': futurePlannerHtml,
   'operator/future_planner': futurePlannerHtml,
   'cargo_owner/plan_future': planFutureCargoHtml,
@@ -822,7 +912,8 @@ const TEMPLATES = {
     <div class="panel mt"><h2>${t('title.deals')}</h2>
       <div class="tablewrap"><table><thead><tr><th>${t('table.route')}</th><th>${t('table.cargo')}</th><th>${t('table.weight')}</th><th>${t('table.price')}</th><th>${t('table.fair')}</th><th>${t('table.status')}</th></tr></thead><tbody id="recentRows"></tbody></table></div>
       <div class="actions mtop"><button class="btn" type="button" data-nav="myloads">${t('nav.myloads')}</button><button class="btn primary" type="button" data-nav="post-load">${t('nav.postLoad')}</button></div>
-    </div>`,
+    </div>
+    ${dashboardRoadmapHtml()}`,
   'cargo_owner/myloads': () => `<div class="panel">
       <h2>${t('title.myloads')} <span class="count" id="ownCount"></span></h2>
       <div class="filters">
@@ -847,7 +938,8 @@ const TEMPLATES = {
 
   'operator/dashboard': () => `<div id="pKpis" class="dkpis"></div>
     <div class="panel mt"><h2>${t('title.deals')} <span class="count" id="dealCount"></span></h2>${dealsTable()}
-      <div class="actions mtop"><button class="btn" type="button" data-nav="loads-board">${t('nav.loadsBoard')}</button><button class="btn primary" type="button" data-nav="matcher">${t('nav.matcher')}</button></div></div>`,
+      <div class="actions mtop"><button class="btn" type="button" data-nav="loads-board">${t('nav.loadsBoard')}</button><button class="btn primary" type="button" data-nav="matcher">${t('nav.matcher')}</button></div></div>
+    ${dashboardRoadmapHtml()}`,
   'operator/matcher': matcherHtml,
   'operator/loads-board': () => `<div class="panel"><h2>${t('title.board')} <span class="count" id="boardCount"></span></h2>
       <div class="tablewrap"><table><thead><tr><th>${t('table.route')}</th><th>${t('table.cargo')}</th><th>${t('table.weight')}</th><th>${t('table.price')}</th><th>${t('table.fair')}</th><th></th></tr></thead><tbody id="boardRows"></tbody></table></div>
