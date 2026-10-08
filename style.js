@@ -860,6 +860,23 @@ function dashboardRoadmapHtml() {
           </div>
         </div>
       </div>
+
+      <!-- LEAP HACKATHON NORTH KARNATAKA DEDICATION BANNER -->
+      <div class="leap-hackathon-dedication-card">
+        <div class="lhd-badge">🏆 LEAP HACKATHON · HUBBALLI</div>
+        <div class="lhd-inner">
+          <div class="lhd-icon-box">📍</div>
+          <div class="lhd-text-content">
+            <h3>This platform is purely built for the North Karnataka region on behalf of the LEAP HACKATHON</h3>
+            <p>
+              ${isKn ? 
+                'ಉತ್ತರ ಕರ್ನಾಟಕದ ರೈತರು, ಕೃಷಿ ಮಂಡಿಗಳು (APMC Amargol, Hubballi) ಮತ್ತು ಸ್ಥಳೀಯ ಚಾಲಕರಿಗಾಗಿ ವಿಶೇಷವಾಗಿ ರೂಪಿಸಲಾದ ದಲ್ಲಾಳಿ-ಮುಕ್ತ ಸ್ಮಾರ್ಟ್ ಲಾಜಿಸ್ಟಿಕ್ಸ್ ತಂತ್ರಜ್ಞಾನ.' : 
+                'Specially engineered for farmers, APMC traders, and truck drivers across Hubballi-Dharwad and North Karnataka to eliminate broker commissions and eliminate empty return trips.'
+              }
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
