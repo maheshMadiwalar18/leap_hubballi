@@ -863,15 +863,23 @@ function dashboardRoadmapHtml() {
 
       <!-- LEAP HACKATHON NORTH KARNATAKA DEDICATION BANNER -->
       <div class="leap-hackathon-dedication-card">
-        <div class="lhd-badge">🏆 LEAP HACKATHON · HUBBALLI</div>
         <div class="lhd-inner">
-          <div class="lhd-icon-box">📍</div>
+          <div class="lhd-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+              <path d="M4 22h16"></path>
+              <path d="M10 14.66V17c0 .55-.45 1-1 1H8c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1h8c.55 0 1-.45 1-1v-1c0-.55-.45-1-1-1h-1c-.55 0-1-.45-1-1v-2.34"></path>
+              <path d="M6 4h12v6a6 6 0 0 1-12 0V4z"></path>
+            </svg>
+          </div>
           <div class="lhd-text-content">
+            <div class="lhd-badge">LEAP HACKATHON · HUBBALLI</div>
             <h3>This platform is purely built for the North Karnataka region on behalf of the LEAP HACKATHON</h3>
             <p>
               ${isKn ? 
-                'ಉತ್ತರ ಕರ್ನಾಟಕದ ರೈತರು, ಕೃಷಿ ಮಂಡಿಗಳು (APMC Amargol, Hubballi) ಮತ್ತು ಸ್ಥಳೀಯ ಚಾಲಕರಿಗಾಗಿ ವಿಶೇಷವಾಗಿ ರೂಪಿಸಲಾದ ದಲ್ಲಾಳಿ-ಮುಕ್ತ ಸ್ಮಾರ್ಟ್ ಲಾಜಿಸ್ಟಿಕ್ಸ್ ತಂತ್ರಜ್ಞಾನ.' : 
-                'Specially engineered for farmers, APMC traders, and truck drivers across Hubballi-Dharwad and North Karnataka to eliminate broker commissions and eliminate empty return trips.'
+                'ಉತ್ತರ ಕರ್ನಾಟಕದ ರೈತರು, ಕೃಷಿ ಮಂಡಿಗಳು (APMC Amargol, Hubballi) ಮತ್ತು ಸ್ಥಳೀಯ ಚಾಲಕರಿಗಾಗಿ ರೂಪಿಸಲಾದ ದಲ್ಲಾಳಿ-ಮುಕ್ತ ಸ್ಮಾರ್ಟ್ ಲಾಜಿಸ್ಟಿಕ್ಸ್ ತಂತ್ರಜ್ಞಾನ.' : 
+                'Specially engineered for farmers, APMC traders, and truck drivers across Hubballi-Dharwad and North Karnataka to eliminate broker commissions and reduce empty return trips.'
               }
             </p>
           </div>

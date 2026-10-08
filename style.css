@@ -3067,61 +3067,61 @@ table tbody td {
   margin: 0;
 }
 
-/* LEAP Hackathon Dedication Card */
+/* LEAP Hackathon Normalized Light Card */
 .leap-hackathon-dedication-card {
   margin-top: 24px;
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  color: #FFFFFF;
-  border-radius: 14px;
-  padding: 22px 24px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-}
-
-.lhd-badge {
-  display: inline-block;
-  background: #F59E0B;
-  color: #0F172A;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  margin-bottom: 12px;
-  text-transform: uppercase;
+  background: #FFFFFF;
+  color: #1E293B;
+  border-radius: 12px;
+  padding: 18px 22px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .lhd-inner {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
 }
 
 .lhd-icon-box {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #2563EB;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
+.lhd-badge {
+  display: inline-block;
+  background: #F8FAFC;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
 .lhd-text-content h3 {
-  font-size: 17px;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin: 0 0 6px;
-  line-height: 1.3;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 4px;
+  line-height: 1.35;
 }
 
 .lhd-text-content p {
-  font-size: 13.5px;
-  color: #CBD5E1;
+  font-size: 13px;
+  color: #64748B;
   line-height: 1.45;
   margin: 0;
 }
