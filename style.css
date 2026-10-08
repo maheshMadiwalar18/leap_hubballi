@@ -2369,10 +2369,586 @@ table tbody td {
   border: 1px solid #FECACA;
 }
 
+/* ==========================================================================
+   SAARATHI AI MATCH RESULTS & JOURNEY PLAN BOXED UI
+   ========================================================================== */
+.saarathi-plan-container {
+  margin-top: 24px;
+}
+
+.saarathi-command-center {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+/* 1. Agentic Reasoning Steps Card */
+.agentic-reasoning-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+
+.arc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 12px;
+}
+
+.arc-head svg {
+  color: #D97706;
+}
+
+.arc-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.arc-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.arc-step .step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  color: #0F172A;
+  font-weight: 700;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* 2. Match Results Header */
+.saarathi-cc-header {
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+}
+
+.cc-tag {
+  display: inline-block;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.saarathi-cc-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 8px;
+}
+
+.cc-sub-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #64748B;
+}
+
+.cc-sub-meta span {
+  background: #F1F5F9;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}
+
+.cc-sub-meta span b {
+  color: #0F172A;
+}
+
+/* 3. Top Recommendations Section */
+.recommendations-container {
+  margin-bottom: 28px;
+}
+
+.rec-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.rec-section-title h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.top3-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.rec-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rec-card.best-match-card {
+  border: 2px solid #2563EB;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.10);
+  background: #FAFCFF;
+}
+
+.rm-badge-top {
+  display: inline-block;
+  align-self: flex-start;
+  background: #2563EB;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.rm-badge-top.secondary {
+  background: #64748B;
+}
+
+.rm-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.rm-icon-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cargo-tag-pill {
+  display: inline-block;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.rm-cargo-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 2px;
+}
+
+.rm-corridor {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.rm-score-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  border: 2px solid #BFDBFE;
+  color: #1D4ED8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rm-score-circle.secondary {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #475569;
+}
+
+.r-score-val {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.r-score-sub {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.rm-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.rm-meta-chips .chip {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.rm-meta-chips .chip.green {
+  background: #DCFCE7;
+  border-color: #BBF7D0;
+  color: #15803D;
+  font-weight: 700;
+}
+
+.rm-meta-chips .chip.net-earn-chip {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #1D4ED8;
+  font-weight: 700;
+}
+
+/* Score breakdown grid */
+.score-breakdown-box {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+
+.sbb-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.sbb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.sbb-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+}
+
+.sbb-item span {
+  color: #64748B;
+}
+
+.sbb-item b {
+  color: #0F172A;
+  font-size: 12px;
+}
+
+.sbb-bar {
+  height: 5px;
+  background: #E2E8F0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.sbb-bar i {
+  display: block;
+  height: 100%;
+  background: #2563EB;
+  border-radius: 3px;
+}
+
+.rm-action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.saarathi-accept-btn {
+  flex: 1;
+  background: #0F172A;
+  color: #FFFFFF;
+  font-weight: 700;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.saarathi-accept-btn:hover {
+  background: #1E293B;
+}
+
+.saarathi-route-btn {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: #334155;
+  font-weight: 600;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.saarathi-route-btn:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+}
+
+/* 4. Transparent Pricing Box */
+.pricing-transparent-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.ptc-badge {
+  display: inline-block;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+
+.ptc-head h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 2px;
+}
+
+.ptc-sub {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0 0 16px;
+}
+
+.ptc-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .ptc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ptc-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.ptc-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: #475569;
+}
+
+.ptc-line .pos { color: #0F172A; font-weight: 700; }
+.ptc-line .zero-fee { color: #15803D; font-weight: 700; }
+.ptc-line .neg { color: #DC2626; font-weight: 600; }
+
+.ptc-total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0F172A;
+  border-top: 1.5px dashed #CBD5E1;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.highlight-net {
+  color: #15803D;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.ptc-compare-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pcb-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 12px;
+}
+
+.pcb-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pcb-item {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.pcb-item .lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748B;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pcb-item .val {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.pcb-item .deduct {
+  font-size: 11.5px;
+  color: #DC2626;
+  margin: 4px 0;
+  font-weight: 600;
+}
+
+.pcb-item .deduct.green {
+  color: #15803D;
+}
+
+.pcb-item .final {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.pcb-item .final.green {
+  color: #15803D;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* 5. Saarathi Recommendation Advice Card */
+.sarathi-advice-card {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+
+.sac-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sac-head h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #166534;
+  margin: 0;
+}
+
+.sac-intro {
+  font-size: 13.5px;
+  color: #14532D;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.sac-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sac-checklist li {
+  font-size: 13.5px;
+  color: #166534;
+  line-height: 1.45;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition: none !important;
     animation: none !important;
   }
 }
+
 
