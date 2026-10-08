@@ -763,7 +763,7 @@ const matcherHtml = () => `
     <div class="panel"><h2>Route</h2><div id="map"></div></div>
     <div class="panel impact">
       <h2>Impact and savings</h2>
-      <p>BackHaul AI reduces empty kilometers by intelligently matching available truck capacity with nearby return freight.</p>
+      <p>returnLoad reduces empty kilometers by intelligently matching available truck capacity with nearby return freight.</p>
       <div id="impactBox"></div>
       <p class="hint">Estimates use a 1.25 road factor, 0.30 L/km diesel burn and ₹92/L. Demo mode: no API is called, so the algorithm is fully deterministic.</p>
     </div>
@@ -1578,7 +1578,7 @@ function yardHtml() {
 
       <div class="panel impact-analytics-card">
         <h2>ಪರಿಸರ ಮತ್ತು ಆರ್ಥಿಕ ಉಳಿತಾಯ (Impact & Operational Efficiency)</h2>
-        <p class="hint">BackHaul AI ನಿಂದ ತಪ್ಪಿಸಲಾದ ಖಾಲಿ ಕಿಲೋಮೀಟರ್‌ಗಳು ಮತ್ತು ಇಂಧನ ಉಳಿತಾಯ</p>
+        <p class="hint">returnLoad ನಿಂದ ತಪ್ಪಿಸಲಾದ ಖಾಲಿ ಕಿಲೋಮೀಟರ್‌ಗಳು ಮತ್ತು ಇಂಧನ ಉಳಿತಾಯ</p>
         <div class="impact-metrics-row">
           <div class="im-box">
             <span class="im-num">2,840 km</span>
@@ -2044,7 +2044,7 @@ function processSaarathiFallback(userText) {
     `Local Fallback Parser Active`,
     `Extracted Corridor: ${location} ➔ ${destination}`,
     `Truck Capacity: ${capacity} Tons`,
-    'Running BackHaul Optimization Engine on APMC Amargol Data'
+    'Running returnLoad Optimization Engine on APMC Amargol Data'
   ];
 
   buildAndRenderJourneyPlan(location, destination, capacity, departure_time, 'tomorrow', null, intent, steps);
@@ -2300,7 +2300,7 @@ function buildAndRenderJourneyPlan(origin, destination, capacity, departure_time
             </div>
 
             <div class="ptc-compare-box">
-              <div class="pcb-title">ಸಾಂಪ್ರದಾಯಿಕ ದಲ್ಲಾಳಿ vs BackHaul AI</div>
+              <div class="pcb-title">ಸಾಂಪ್ರದಾಯಿಕ ದಲ್ಲಾಳಿ vs returnLoad</div>
               <div class="pcb-row">
                 <div class="pcb-item broker">
                   <span class="lbl">ಸಾಂಪ್ರದಾಯಿಕ ದಲ್ಲಾಳಿ</span>
@@ -2309,7 +2309,7 @@ function buildAndRenderJourneyPlan(origin, destination, capacity, departure_time
                   <div class="final">₹17,000 ಆದಾಯ</div>
                 </div>
                 <div class="pcb-item backhaul">
-                  <span class="lbl">BackHaul AI</span>
+                  <span class="lbl">returnLoad</span>
                   <div class="val">₹${num(cargoFreight)}</div>
                   <div class="deduct green">₹0 ಪ್ಲಾಟ್‌ಫಾರ್ಮ್ ಶುಲ್ಕ</div>
                   <div class="final green">₹18,500 ಉಳಿತಾಯ!</div>
@@ -2928,7 +2928,7 @@ function futurePlannerHtml() {
     <div class="xai-card">
       <div class="xai-title">
         <span style="font-size:18px;">💡</span>
-        <span>Explainable AI: Why does BackHaul AI predict Bengaluru? (ವಿವರಣೆ)</span>
+        <span>Explainable AI: Why does returnLoad predict Bengaluru? (ವಿವರಣೆ)</span>
       </div>
       <div class="xai-list">
         <div class="xai-item"><span class="icon">✓</span> <span><b>18 suitable loads</b> historically posted after 3:00 PM on Wednesdays along Bengaluru corridor.</span></div>
@@ -3179,7 +3179,7 @@ function drawPredMap() {
 function planFutureCargoHtml() {
   return '<div class="panel" style="max-width:700px;margin:0 auto">' +
     '<h2>' + t('nav.plan_future') + '</h2>' +
-    '<p class="hint">Register upcoming farm harvests or factory production. BackHaul AI predicts and matches return haulers weeks in advance, eliminating last-minute price spikes.</p>' +
+    '<p class="hint">Register upcoming farm harvests or factory production. returnLoad predicts and matches return haulers weeks in advance, eliminating last-minute price spikes.</p>' +
     '<form id="planFutureForm" class="fields" style="margin-top:16px">' +
       '<label>Cargo Type<input id="pfCargo" placeholder="e.g. Onions, Maize, Cotton" value="Onions" required></label>' +
       '<label>Quantity (tonnes)<input id="pfQty" type="number" step="0.5" min="1" value="8" required></label>' +
@@ -3220,7 +3220,7 @@ function initPlanFuture() {
     };
     db.myLoads.unshift(newL);
     saveDb();
-    toast('Predictive shipment planned! BackHaul return haulers notified.');
+    toast('Predictive shipment planned! returnLoad haulers notified.');
     showView('myloads');
   };
 }
