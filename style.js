@@ -874,8 +874,8 @@ function dashboardRoadmapHtml() {
             <div class="lhd-badge">LEAP HACKATHON · HUBBALLI</div>
             <h3>This platform is purely built for the North Karnataka region on behalf of the LEAP HACKATHON</h3>
             <p>
-              ${isKn ? 
-                'ಉತ್ತರ ಕರ್ನಾಟಕದ ರೈತರು, ಕೃಷಿ ಮಂಡಿಗಳು (APMC Amargol, Hubballi) ಮತ್ತು ಸ್ಥಳೀಯ ಚಾಲಕರಿಗಾಗಿ ರೂಪಿಸಲಾದ ದಲ್ಲಾಳಿ-ಮುಕ್ತ ಸ್ಮಾರ್ಟ್ ಲಾಜಿಸ್ಟಿಕ್ಸ್ ತಂತ್ರಜ್ಞಾನ.' : 
+              ${isKn ?
+                'ಉತ್ತರ ಕರ್ನಾಟಕದ ರೈತರು, ಕೃಷಿ ಮಂಡಿಗಳು (APMC Amargol, Hubballi) ಮತ್ತು ಸ್ಥಳೀಯ ಚಾಲಕರಿಗಾಗಿ ರೂಪಿಸಲಾದ ದಲ್ಲಾಳಿ-ಮುಕ್ತ ಸ್ಮಾರ್ಟ್ ಲಾಜಿಸ್ಟಿಕ್ಸ್ ತಂತ್ರಜ್ಞಾನ.' :
                 'Specially engineered for farmers, APMC traders, and truck drivers across Hubballi-Dharwad and North Karnataka to eliminate broker commissions and reduce empty return trips.'
               }
             </p>
@@ -1016,9 +1016,9 @@ function advanceActive() {
   if (a.step < STEPS.length - 1) toast(t('filter.status') + ': ' + t('status.' + STEPS[a.step]) || STEPS[a.step]);
   else {
     db.trips.push({ id: db.nextTrip++, route: a.from + ' → ' + a.to, date: todayStr(), status: 'Delivered', earn: a.price, km: a.km, fuel: a.fuel, util: a.util });
-    const truck = db.trucks.find(t => t.id === a.truckId); 
+    const truck = db.trucks.find(t => t.id === a.truckId);
     if (truck) { truck.status = 'Available'; truck.lastCity = a.to; delete truck.dismissedAlert; delete truck.snoozeUntil; }
-    db.active = null; 
+    db.active = null;
     checkAlerts();
     if (db.activeAlert) {
       toast(`Delivered. ${truck ? truck.reg : 'Truck'} is free in ${a.to}. ${db.activeAlert.loadCount} return loads found.`);
@@ -1036,7 +1036,7 @@ function renderAlerts() {
   const lowM = a.best && a.best.profit.net < 1000;
   const html = `<div class="dash-alert ${lowM ? 'low-margin' : ''}" role="alert">
     <button class="al-close" aria-label="Dismiss alert" data-act="alDismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-    <div class="al-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> 
+    <div class="al-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
     ${lowM ? t('alert.low') : t('alert.return')}<span class="nav-dot"></span></div>
     <div class="al-info">Truck <b>${esc(a.truck)}</b> · Current location <b>${esc(a.city)}</b> · Available capacity <b>${a.availCap} t</b></div>
     <div style="font-weight:600;margin-bottom:8px;font-size:14.5px">${a.loadCount} return loads available</div>
@@ -1272,7 +1272,7 @@ document.addEventListener('click', e => {
     case 'simDeliver': if (db.active) { db.active.step = STEPS.length - 2; advanceActive(); } break;
     case 'markDel': {
       const tr = db.trucks.find(x => x.id === id);
-      if (tr) { 
+      if (tr) {
         tr.status = 'Available'; tr.lastCity = tr.lastCity || db.city || 'Bengaluru';
         delete tr.dismissedAlert; delete tr.snoozeUntil;
         if (db.active && db.active.truckId === tr.id) { db.active.step = STEPS.length - 2; advanceActive(); break; }
@@ -1285,7 +1285,7 @@ document.addEventListener('click', e => {
     case 'alSnooze': { const tr = db.trucks.find(x=>x.reg === db.activeAlert.truck); if (tr) tr.snoozeUntil = Date.now() + 15*60*1000; checkAlerts(); renderAlerts(); saveDb(); break; }
     case 'alDismiss': { const tr = db.trucks.find(x=>x.reg === db.activeAlert.truck); if (tr) tr.dismissedAlert = true; checkAlerts(); renderAlerts(); saveDb(); break; }
     case 'alFind': {
-      const tr = db.trucks.find(x=>x.reg === db.activeAlert.truck); 
+      const tr = db.trucks.find(x=>x.reg === db.activeAlert.truck);
       if (tr && db.activeAlert.best) {
         showView('transporter/matcher');
         setTimeout(() => {
@@ -1460,7 +1460,7 @@ function yardHtml() {
           <span class="yhb-tag">APMC AMARGOL · LIVE YARD DISPATCH CONTROL</span>
           <h1>ಅಮರಗೋಳ ಎಪಿಎಂಸಿ ಯಾರ್ಡ್ — ಲೈವ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</h1>
           <p class="yhb-sub">
-            ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ಕೃಷಿ ಸಗಟು ಮಾರುಕಟ್ಟೆ ಯಾರ್ಡ್ · Hubballi Logistics Hub · 
+            ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ಕೃಷಿ ಸಗಟು ಮಾರುಕಟ್ಟೆ ಯಾರ್ಡ್ · Hubballi Logistics Hub ·
             <span class="live-dot-pulse"></span> Real-time Inbound & Outbound Dispatch Control
           </p>
         </div>
@@ -1515,7 +1515,7 @@ function yardHtml() {
           <span class="sbc-badge">SEASONAL HARVEST INTELLIGENCE · ಪ್ರಸ್ತುತ ಸುಗ್ಗಿ ಋತು</span>
           <h3>October – January Peak Season: Onion & Potato Arrivals</h3>
           <p>
-            ಅಮರಗೋಳ ಮಂಡಿಯಲ್ಲಿ ಪ್ರಸ್ತುತ ಈರುಳ್ಳಿ ಮತ್ತು ಆಲೂಗಡ್ಡೆ ಆವಕ ಗರಿಷ್ಠ ಪ್ರಮಾಣದಲ್ಲಿದೆ. 
+            ಅಮರಗೋಳ ಮಂಡಿಯಲ್ಲಿ ಪ್ರಸ್ತುತ ಈರುಳ್ಳಿ ಮತ್ತು ಆಲೂಗಡ್ಡೆ ಆವಕ ಗರಿಷ್ಠ ಪ್ರಮಾಣದಲ್ಲಿದೆ.
             NH-48 ಕಾರಿಡಾರ್‌ನಲ್ಲಿ ಬೆಂಗಳೂರು ಮತ್ತು ಮೈಸೂರು ಮಾರ್ಗಗಳಿಗೆ ಹೆಚ್ಚಿನ ಹೊರಹರಿವಿನ ಬೇಡಿಕೆ ಇದೆ.
           </p>
         </div>
@@ -2144,8 +2144,8 @@ function buildAndRenderJourneyPlan(origin, destination, capacity, departure_time
           <div class="cc-tag">ಸಾರಥಿ ಹೊಣೆಗಾರಿಕೆ ಫಲಿತಾಂಶ · MATCH RESULTS</div>
           <h2>${knOrigin} ➔ ${knDest}</h2>
           <div class="cc-sub-meta">
-            <span>ಟ್ರಕ್ ಲಭ್ಯತೆ: <b>${capacity} ಟನ್</b></span> &nbsp;•&nbsp; 
-            <span>ದಿನಾಂಕ: <b>${dateStr === 'tomorrow' ? 'ನಾಳೆ (Tomorrow)' : 'ಇಂದು (Today)'}</b></span> &nbsp;•&nbsp; 
+            <span>ಟ್ರಕ್ ಲಭ್ಯತೆ: <b>${capacity} ಟನ್</b></span> &nbsp;•&nbsp;
+            <span>ದಿನಾಂಕ: <b>${dateStr === 'tomorrow' ? 'ನಾಳೆ (Tomorrow)' : 'ಇಂದು (Today)'}</b></span> &nbsp;•&nbsp;
             <span>ನಿರ್ಗಮನ: <b>${departure_time}</b></span>
           </div>
         </div>
