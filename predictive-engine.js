@@ -1,21 +1,5 @@
-/**
- * PREDICTIVE BACKHAUL ENGINE
- * BackHaul AI + Saarathi AI · APMC Amargol, Hubballi, Karnataka
- * 
- * Objectives:
- * - Predict where, when, what type, and approximately how profitable the next outbound return load is.
- * - Calculate Empty-Return Risk for candidate destinations.
- * - Compute Backhaul Opportunity Score with configurable weights.
- * - Provide Explainable AI (XAI) rationale for all predictions.
- * - Handle Cold-Start gracefully with calibrated baseline heuristics.
- * - Deliver Seasonal Intelligence for APMC Amargol agricultural commodities.
- * - Provide realistic simulation dataset & evaluation metrics.
- */
-
 const fs = require('fs');
 const path = require('path');
-
-// ==================== CONFIGURATION & CONSTANTS ====================
 
 const CONFIG = {
   weights: {
@@ -30,10 +14,9 @@ const CONFIG = {
   dieselBurnRateLPerKm: 0.30,
   baseRatePerKm: 38.0,
   roadFactor: 1.25,
-  coldStartThreshold: 20 // minimum historical records before full ML confidence
+  coldStartThreshold: 20 
 };
 
-// Major Karnataka / Inter-state corridors from APMC Amargol
 const CORRIDORS = {
   'Bengaluru': { distanceKm: 410, baseDemand: 0.88, tollEst: 680, avgDetourKm: 3, highway: 'NH-48', returnCorridorScore: 0.92 },
   'Mysuru': { distanceKm: 460, baseDemand: 0.68, tollEst: 720, avgDetourKm: 4, highway: 'NH-48 / NH-150A', returnCorridorScore: 0.74 },
@@ -49,7 +32,6 @@ const CORRIDORS = {
   'Chennai': { distanceKm: 680, baseDemand: 0.28, tollEst: 1150, avgDetourKm: 12, highway: 'NH-48', returnCorridorScore: 0.32 }
 };
 
-// APMC Amargol Agricultural Commodities & Seasonal Trends
 const SEASONAL_COMMODITIES = [
   {
     name: 'Onions (ಈರುಳ್ಳಿ)',
@@ -103,7 +85,6 @@ const SEASONAL_COMMODITIES = [
   }
 ];
 
-// Active Simulated Operational State for APMC Amargol
 let simulationState = {
   isSimulated: true,
   dailyArrivals: 348,
@@ -123,69 +104,54 @@ let simulationState = {
   }
 };
 
-// ==================== CORE PREDICTIVE MODELS ====================
-
-/**
- * Predicts the probability of finding a suitable outbound load from APMC Amargol
- * to a specific destination given the truck specs, current time, and market signals.
- */
 function predictLoadProbability(dest, truck = {}, nowHour = 15.5) {
   const corridor = CORRIDORS[dest] || { distanceKm: 300, baseDemand: 0.40, returnCorridorScore: 0.50 };
   let baseP = corridor.baseDemand;
 
-  // 1. Time-of-day peak factor (APMC Amargol loading peaks between 14:30 and 18:30)
   let timeFactor = 1.0;
   if (nowHour >= 14 && nowHour <= 18.5) {
-    timeFactor = 1.18; // Peak dispatch window
+    timeFactor = 1.18; 
   } else if (nowHour > 18.5 && nowHour <= 21) {
     timeFactor = 0.95;
   } else if (nowHour < 11) {
-    timeFactor = 0.78; // Morning is mostly inbound arrivals
+    timeFactor = 0.78; 
   } else {
     timeFactor = 1.05;
   }
 
-  // 2. Capacity Fit Factor
   const cap = parseFloat(truck.capacity || truck.cap || 8);
   let capFactor = 1.0;
   if (cap >= 6 && cap <= 12) {
-    capFactor = 1.10; // Sweet spot for APMC agricultural loads
+    capFactor = 1.10; 
   } else if (cap > 12) {
-    capFactor = 0.92; // Very large trucks take slightly longer to fill
+    capFactor = 0.92; 
   } else {
     capFactor = 0.98;
   }
 
-  // 3. Seasonal Surge Boost from APMC Agricultural Volume
-  let seasonalBoost = 1.08; // Current season onion & chilli surge
+  let seasonalBoost = 1.08; 
 
   let p = baseP * timeFactor * capFactor * seasonalBoost;
-  // Bound to [0.08, 0.96]
+
   return Math.min(0.96, Math.max(0.08, parseFloat(p.toFixed(3))));
 }
 
-/**
- * Predicts realistic freight price range (Min, Max, Midpoint) and Net Earnings
- */
 function predictFreightAndNet(dest, truck = {}) {
   const corridor = CORRIDORS[dest] || { distanceKm: 300, tollEst: 400 };
   const cap = parseFloat(truck.capacity || truck.cap || 8);
   const km = corridor.distanceKm * CONFIG.roadFactor;
-  
-  // Base cost calculation
+
   const fuelBurnL = km * CONFIG.dieselBurnRateLPerKm;
   const fuelCost = fuelBurnL * CONFIG.dieselPricePerLiter;
   const toll = corridor.tollEst;
-  const operationalCost = fuelCost + toll + 800; // includes driver tea/halt buffer
+  const operationalCost = fuelCost + toll + 800; 
 
-  // Freight calculation based on mileage and capacity
   const ratePerKm = CONFIG.baseRatePerKm * (0.75 + 0.25 * Math.min(1.5, cap / 8));
   const midpoint = Math.round((km * ratePerKm) / 100) * 100;
-  
-  // Market elasticity range (+/- 8% to 10%)
+
   const minFreight = Math.round((midpoint * 0.92) / 100) * 100;
   const maxFreight = Math.round((midpoint * 1.09) / 100) * 100;
-  
+
   const estimatedNet = Math.round(midpoint - operationalCost);
 
   return {
@@ -200,54 +166,39 @@ function predictFreightAndNet(dest, truck = {}) {
   };
 }
 
-/**
- * Calculates Empty-Return Risk = Probability of NOT finding a return trip back from destination
- */
 function predictEmptyReturnRisk(dest) {
   const corridor = CORRIDORS[dest] || { returnCorridorScore: 0.50 };
-  // Higher return corridor score = Lower empty-return risk
+
   const risk = 1.0 - corridor.returnCorridorScore;
   return parseFloat(Math.min(0.85, Math.max(0.09, risk)).toFixed(2));
 }
 
-/**
- * Calculates Predictive Backhaul Opportunity Score (0–100)
- */
 function calculateBackhaulScore(loadProb, financial, emptyRisk, preferredDest, dest, truck = {}) {
   const w = CONFIG.weights;
 
-  // 1. Load probability component (0 - 30)
   const pScore = loadProb * 100 * w.loadProbability;
 
-  // 2. Route compatibility component (0 - 20)
   let routeComp = 0.85;
   if (preferredDest && preferredDest.toLowerCase() === dest.toLowerCase()) {
     routeComp = 1.0;
   }
   const rScore = routeComp * 100 * w.routeCompatibility;
 
-  // 3. Capacity fit component (0 - 15)
   const cap = parseFloat(truck.capacity || truck.cap || 8);
   const capFit = (cap >= 6 && cap <= 12) ? 1.0 : 0.82;
   const cScore = capFit * 100 * w.capacityCompatibility;
 
-  // 4. Expected Net Earnings score (0 - 15)
   const earnRatio = Math.min(1.0, financial.estimatedNet / 16000);
   const eScore = earnRatio * 100 * w.expectedNetEarnings;
 
-  // 5. Low Detour component (0 - 10)
   const detourScore = Math.max(0.4, 1.0 - (financial.detourKm / 20)) * 100 * w.detourPenalty;
 
-  // 6. Return corridor viability / deadline compatibility (0 - 10)
   const returnViability = (1.0 - emptyRisk) * 100 * w.deadlineCompatibility;
 
   const totalScore = Math.round(pScore + rScore + cScore + eScore + detourScore + returnViability);
   return Math.min(99, Math.max(30, totalScore));
 }
 
-/**
- * Generates structured, transparent Explainable AI (XAI) reasons
- */
 function generateXAIReasons(dest, loadProb, financial, emptyRisk, truck = {}) {
   const cap = parseFloat(truck.capacity || truck.cap || 8);
   const reasons = [];
@@ -277,9 +228,6 @@ function generateXAIReasons(dest, loadProb, financial, emptyRisk, truck = {}) {
   return reasons;
 }
 
-/**
- * Generates an end-to-end Predictive Timeline for a given truck
- */
 function generatePredictiveTimeline(truckId, dest = 'Bengaluru', expectedEmptyTime = '15:30') {
   const baseParts = expectedEmptyTime.split(':');
   let hr = parseInt(baseParts[0], 10) || 15;
@@ -345,16 +293,12 @@ function generatePredictiveTimeline(truckId, dest = 'Bengaluru', expectedEmptyTi
   ];
 }
 
-/**
- * Predict Backhaul Opportunity for a Specific Truck
- */
 function predictBackhaulForTruck(truck = {}) {
   const truckId = truck.truckId || truck.reg || truck.id || 'KA-25-AB-1234';
   const capacity = parseFloat(truck.capacity || truck.cap || 8);
   const preferred = truck.preferredDestination || truck.destination || 'Bengaluru';
   const expectedEmpty = truck.expectedEmptyTime || truck.time || '15:30';
 
-  // Evaluate all destinations
   const candidateDestinations = Object.keys(CORRIDORS).map(dest => {
     const prob = predictLoadProbability(dest, truck);
     const financial = predictFreightAndNet(dest, truck);
@@ -362,7 +306,6 @@ function predictBackhaulForTruck(truck = {}) {
     const score = calculateBackhaulScore(prob, financial, emptyRisk, preferred, dest, truck);
     const reasons = generateXAIReasons(dest, prob, financial, emptyRisk, truck);
 
-    // Confidence calibration: if simulated/cold-start records are moderate
     const confidenceScore = simulationState.totalHistoricalRecords >= CONFIG.coldStartThreshold ? 0.89 : 0.65;
     const confidenceLevel = confidenceScore >= 0.80 ? 'High' : 'Medium';
 
@@ -395,7 +338,6 @@ function predictBackhaulForTruck(truck = {}) {
     };
   });
 
-  // Sort by Backhaul Opportunity Score descending
   candidateDestinations.sort((a, b) => b.score - a.score);
 
   const best = candidateDestinations[0];
@@ -416,9 +358,6 @@ function predictBackhaulForTruck(truck = {}) {
   };
 }
 
-/**
- * Destination Demand Summary for the Next 2–6 Hours
- */
 function getDestinationDemandForecast() {
   const destinations = Object.keys(CORRIDORS).map(dest => {
     const prob = predictLoadProbability(dest, { capacity: 8 });
@@ -449,9 +388,6 @@ function getDestinationDemandForecast() {
   };
 }
 
-/**
- * Seasonal Intelligence for APMC Amargol
- */
 function getSeasonalIntelligence() {
   return {
     marketHub: 'APMC Amargol Wholesale Yard, Hubballi',
@@ -463,9 +399,6 @@ function getSeasonalIntelligence() {
   };
 }
 
-/**
- * Model Evaluation Analytics (Transparency & Verification)
- */
 function getModelAnalytics() {
   return {
     modelType: 'Hybrid Gradient Calibrated Heuristic Baseline (MVP)',
@@ -488,8 +421,6 @@ function getModelAnalytics() {
   };
 }
 
-// ==================== REST API ROUTE HANDLER ====================
-
 function handleApi(req, res, pathname) {
   return new Promise((resolve) => {
     const sendJson = (statusCode, data) => {
@@ -501,7 +432,6 @@ function handleApi(req, res, pathname) {
       resolve();
     };
 
-    // 1. POST /api/predict/backhaul
     if (req.method === 'POST' && pathname === '/api/predict/backhaul') {
       let body = '';
       req.on('data', chunk => body += chunk);
@@ -517,25 +447,21 @@ function handleApi(req, res, pathname) {
       return;
     }
 
-    // 2. GET /api/predict/destinations & /api/predict/demand
     if (req.method === 'GET' && (pathname === '/api/predict/destinations' || pathname === '/api/predict/demand' || pathname === '/api/predict/demand-forecast')) {
       const demand = getDestinationDemandForecast();
       return sendJson(200, { success: true, ...demand });
     }
 
-    // 4. GET /api/predict/seasonal
     if (req.method === 'GET' && pathname === '/api/predict/seasonal') {
       const seasonal = getSeasonalIntelligence();
       return sendJson(200, { success: true, ...seasonal });
     }
 
-    // 5. GET /api/predict/analytics
     if (req.method === 'GET' && pathname === '/api/predict/analytics') {
       const analytics = getModelAnalytics();
       return sendJson(200, { success: true, ...analytics });
     }
 
-    // 6. GET /api/predict/truck/:truckId
     if (req.method === 'GET' && (pathname.startsWith('/api/predict/truck/') || pathname.startsWith('/api/predict/truck'))) {
       const parts = pathname.split('/');
       const truckId = parts[4] ? decodeURIComponent(parts[4]) : 'KA-25-AB-1234';
@@ -543,7 +469,6 @@ function handleApi(req, res, pathname) {
       return sendJson(200, { success: true, ...result });
     }
 
-    // 7. GET /api/predict/timeline/:truckId
     if (req.method === 'GET' && (pathname.startsWith('/api/predict/timeline/') || pathname.startsWith('/api/predict/timeline'))) {
       const parts = pathname.split('/');
       const truckId = parts[4] ? decodeURIComponent(parts[4]) : 'KA-25-AB-1234';
@@ -551,7 +476,6 @@ function handleApi(req, res, pathname) {
       return sendJson(200, { success: true, truckId, timeline });
     }
 
-    // 8. GET /api/predict/explanations/:dest
     if (req.method === 'GET' && pathname.startsWith('/api/predict/explanations/')) {
       const dest = decodeURIComponent(pathname.replace('/api/predict/explanations/', ''));
       const prob = predictLoadProbability(dest);
@@ -561,7 +485,6 @@ function handleApi(req, res, pathname) {
       return sendJson(200, { success: true, destination: dest, probability: prob, reasons });
     }
 
-    // 9. POST /api/predict/simulate-toggle
     if (req.method === 'POST' && pathname === '/api/predict/simulate-toggle') {
       simulationState.isSimulated = !simulationState.isSimulated;
       return sendJson(200, { success: true, isSimulated: simulationState.isSimulated });

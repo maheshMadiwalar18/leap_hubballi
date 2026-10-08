@@ -1,7 +1,5 @@
-
-
 :root {
-  
+
   --color-primary: #0B2947;
   --color-primary-light: #123B5D;
   --color-primary-dark: #071C33;
@@ -11,8 +9,7 @@
   --color-accent: #F5A900;
   --color-accent-hover: #E09800;
   --color-accent-subtle: #FFF8E6;
-  
-  
+
   --color-success: #16A34A;
   --color-success-bg: #DCFCE7;
   --color-warning: #F59E0B;
@@ -22,35 +19,29 @@
   --color-info: #0284C7;
   --color-info-bg: #E0F2FE;
 
-  
   --color-text: #102A43;
   --color-text-secondary: #334E68;
   --color-muted: #64748B;
   --color-border: #D9E2EC;
   --color-border-subtle: #E2E8F0;
 
-  /* Sizing & Radius Tokens */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 18px;
   --radius-full: 9999px;
 
-  /* Shadows */
   --shadow-sm: 0 1px 3px rgba(11, 41, 71, 0.05);
   --shadow-card: 0 2px 8px rgba(11, 41, 71, 0.06), 0 1px 3px rgba(11, 41, 71, 0.04);
   --shadow-hover: 0 10px 24px rgba(11, 41, 71, 0.10), 0 4px 8px rgba(11, 41, 71, 0.04);
   --shadow-modal: 0 24px 60px rgba(11, 41, 71, 0.35);
 
-  /* Fonts */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Kannada", sans-serif;
   --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Kannada", sans-serif;
 
-  /* Layout */
   --max-content-width: 1400px;
   --nav-height: 64px;
 
-  /* Backward Compatibility Variables */
   --navy: var(--color-primary);
   --navy2: var(--color-primary-light);
   --ink: var(--color-text);
@@ -64,9 +55,6 @@
   --accent: var(--color-accent);
 }
 
-/* ==========================================================================
-   BASE & RESET
-   ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -89,7 +77,6 @@ body {
   flex-direction: column;
 }
 
-/* Kannada Unicode line-height and rendering */
 html[lang="kn"] body,
 .lang-kn {
   font-family: 'Noto Sans Kannada', 'Inter', sans-serif;
@@ -121,9 +108,6 @@ p {
   margin: 0 0 10px;
 }
 
-/* ==========================================================================
-   GLOBAL LAYOUT SHELL
-   ========================================================================== */
 .wrap {
   width: 100%;
   max-width: var(--max-content-width);
@@ -139,9 +123,6 @@ p {
   .wrap { padding: 0 16px; }
 }
 
-/* --------------------------------------------------------------------------
-   TOP NAVIGATION (64px STICKY DEEP NAVY)
-   -------------------------------------------------------------------------- */
 .app-topbar {
   position: sticky;
   top: 0;
@@ -219,7 +200,6 @@ p {
   text-transform: uppercase;
 }
 
-/* Nav tabs */
 .ub-nav {
   display: flex;
   align-items: center;
@@ -266,7 +246,6 @@ p {
   stroke: var(--color-accent);
 }
 
-/* Topbar right */
 .ub-right {
   display: flex;
   align-items: center;
@@ -274,7 +253,6 @@ p {
   flex-shrink: 0;
 }
 
-/* Segmented Language Selector */
 .lang-segmented {
   display: inline-flex;
   align-items: center;
@@ -308,8 +286,6 @@ p {
   font-weight: 700;
 }
 
-
-/* User Profile Badge */
 .user-profile-badge {
   display: flex;
   align-items: center;
@@ -357,7 +333,6 @@ p {
   text-transform: capitalize;
 }
 
-/* Sign out button */
 .ub-btn-logout {
   display: inline-flex;
   align-items: center;
@@ -381,7 +356,6 @@ p {
   color: #FCA5A5;
 }
 
-/* Notifications bell */
 .ub-bell-wrap { position: relative; }
 .ub-bell {
   background: transparent;
@@ -428,9 +402,6 @@ p {
   margin-bottom: 8px;
 }
 
-/* ==========================================================================
-   COMPACT PAGE HEADER (100–140px MAX HEIGHT)
-   ========================================================================== */
 .app-page-header {
   background: linear-gradient(180deg, #0B2947 0%, #10385C 100%);
   color: #FFFFFF;
@@ -523,9 +494,6 @@ p {
   font-weight: 700;
 }
 
-/* ==========================================================================
-   AUTHENTICATION OVERLAY (2-COLUMN B2B SAAS VIEW - LIGHT NATURAL THEME)
-   ========================================================================== */
 .ov {
   position: fixed;
   inset: 0;
@@ -571,7 +539,6 @@ p {
   }
 }
 
-/* Left Brand & Real Scenario Hero Pane (Light & Natural) */
 .auth-hero-pane {
   background: #F8FAFC;
   color: #0F172A;
@@ -629,7 +596,6 @@ p {
   line-height: 1.4;
 }
 
-/* Real Scenario Photo Showcase */
 .auth-photo-card {
   position: relative;
   border-radius: 12px;
@@ -682,7 +648,6 @@ p {
   margin: 0;
 }
 
-/* Ground Value Metrics */
 .auth-ground-metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -755,7 +720,6 @@ p {
   flex-shrink: 0;
 }
 
-/* Right Auth Form Pane */
 .auth-form-pane {
   padding: 40px 36px;
   background: #FFFFFF;
@@ -796,7 +760,6 @@ p {
   margin-bottom: 18px;
 }
 
-/* Form inputs */
 .form-group {
   margin-bottom: 12px;
   text-align: left;
@@ -844,7 +807,6 @@ input:focus, select:focus, textarea:focus {
   margin: 6px 0;
 }
 
-/* Buttons in auth */
 .a-btn {
   width: 100%;
   height: 44px;
@@ -931,7 +893,6 @@ input:focus, select:focus, textarea:focus {
   text-decoration: underline;
 }
 
-/* Profile Overlay Card */
 .ov-card.profile-card {
   width: 100%;
   max-width: 460px;
@@ -942,9 +903,6 @@ input:focus, select:focus, textarea:focus {
   position: relative;
 }
 
-/* ==========================================================================
-   BUTTON SYSTEM
-   ========================================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1029,9 +987,6 @@ input:focus, select:focus, textarea:focus {
   font-size: 15px;
 }
 
-/* ==========================================================================
-   METRIC KPI CARDS
-   ========================================================================== */
 .kpis, .dkpis, .yard-metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1102,9 +1057,6 @@ input:focus, select:focus, textarea:focus {
   transition: width 0.4s ease;
 }
 
-/* ==========================================================================
-   PANELS & CARDS
-   ========================================================================== */
 .panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -1136,9 +1088,6 @@ input:focus, select:focus, textarea:focus {
   .fields { grid-template-columns: 1fr; }
 }
 
-/* ==========================================================================
-   TABLE SYSTEM & BADGES
-   ========================================================================== */
 .tablewrap {
   width: 100%;
   overflow-x: auto;
@@ -1175,7 +1124,6 @@ tbody tr:hover td {
   background: #F8FAFC;
 }
 
-/* Reusable Status Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -1192,9 +1140,6 @@ tbody tr:hover td {
 .b-matched { background: var(--color-primary); color: #FFFFFF; }
 .b-transit { background: var(--color-info-bg); color: var(--color-info); }
 
-/* ==========================================================================
-   SAARATHI AI COMPONENT
-   ========================================================================== */
 .saarathi-wrapper {
   display: flex;
   flex-direction: column;
@@ -1324,7 +1269,6 @@ tbody tr:hover td {
   color: #FFFFFF;
 }
 
-/* Saarathi Chat & Input */
 .saarathi-chat-panel {
   background: #FFFFFF;
   border: 1px solid var(--color-border);
@@ -1373,9 +1317,6 @@ tbody tr:hover td {
   height: 44px;
 }
 
-/* ==========================================================================
-   DRIVER MODE
-   ========================================================================== */
 .driver-mode-screen {
   display: flex;
   flex-direction: column;
@@ -1509,9 +1450,6 @@ tbody tr:hover td {
 .db-title { font-size: 16px; font-weight: 700; color: var(--color-text); margin-bottom: 2px; }
 .db-sub { font-size: 12px; color: var(--color-muted); }
 
-/* ==========================================================================
-   PREDICTIVE BACKHAUL & MATCH CARDS
-   ========================================================================== */
 .pred-card, .card {
   background: #FFFFFF;
   border: 1px solid var(--color-border);
@@ -1613,9 +1551,6 @@ tbody tr:hover td {
   flex: 1;
 }
 
-/* ==========================================================================
-   TRANSPARENT PRICING BREAKDOWN
-   ========================================================================== */
 .pricing-breakdown-card {
   background: #F8FAFC;
   border: 1px solid var(--color-border);
@@ -1666,9 +1601,6 @@ tbody tr:hover td {
   padding-top: 4px;
 }
 
-/* ==========================================================================
-   LIVE YARD & SEASONAL DEMAND
-   ========================================================================== */
 .seasonal-banner-card {
   background: #FFFBEB;
   border: 1px solid #FDE68A;
@@ -1801,7 +1733,6 @@ tbody tr:hover td {
   font-size: 12px;
 }
 
-/* Map & Chart containers */
 #map {
   height: 360px;
   border-radius: var(--radius-md);
@@ -1815,9 +1746,6 @@ tbody tr:hover td {
   height: 280px;
 }
 
-/* ==========================================================================
-   TOAST NOTIFICATION
-   ========================================================================== */
 #toast {
   position: fixed;
   bottom: 24px;
@@ -1839,7 +1767,6 @@ tbody tr:hover td {
 #toast[hidden] {
   display: none !important;
 }
-
 
 .saarathi-wrapper {
   max-width: 960px;
@@ -2185,9 +2112,6 @@ tbody tr:hover td {
   color: #334E68;
 }
 
-/* ==========================================================================
-   RESPONSIVE ADJUSTMENTS
-   ========================================================================== */
 @media (max-width: 768px) {
   .dkpis, .yard-metrics-grid {
     grid-template-columns: 1fr 1fr;
@@ -2204,9 +2128,6 @@ tbody tr:hover td {
   }
 }
 
-/* ==========================================================================
-   FILTER BARS & DATA TABLES (TRIP HISTORY, MY LOADS, BOARD)
-   ========================================================================== */
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -2369,9 +2290,6 @@ table tbody td {
   border: 1px solid #FECACA;
 }
 
-/* ==========================================================================
-   SAARATHI AI MATCH RESULTS & JOURNEY PLAN BOXED UI
-   ========================================================================== */
 .saarathi-plan-container {
   margin-top: 24px;
 }
@@ -2384,7 +2302,6 @@ table tbody td {
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
-/* 1. Agentic Reasoning Steps Card */
 .agentic-reasoning-card {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
@@ -2437,7 +2354,6 @@ table tbody td {
   margin-top: 1px;
 }
 
-/* 2. Match Results Header */
 .saarathi-cc-header {
   border-bottom: 1px solid #E2E8F0;
   padding-bottom: 18px;
@@ -2484,7 +2400,6 @@ table tbody td {
   color: #0F172A;
 }
 
-/* 3. Top Recommendations Section */
 .recommendations-container {
   margin-bottom: 28px;
 }
@@ -2646,7 +2561,6 @@ table tbody td {
   font-weight: 700;
 }
 
-/* Score breakdown grid */
 .score-breakdown-box {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -2745,7 +2659,6 @@ table tbody td {
   border-color: #94A3B8;
 }
 
-/* 4. Transparent Pricing Box */
 .pricing-transparent-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -2900,7 +2813,6 @@ table tbody td {
   font-weight: 800;
 }
 
-/* 5. Saarathi Recommendation Advice Card */
 .sarathi-advice-card {
   background: #F0FDF4;
   border: 1px solid #BBF7D0;
@@ -2944,9 +2856,6 @@ table tbody td {
   line-height: 1.45;
 }
 
-/* ==========================================================================
-   DASHBOARD ROADMAP & EXPANSION SECTION
-   ========================================================================== */
 .dashboard-roadmap-panel {
   margin-top: 24px;
   background: #FFFFFF;
@@ -3067,7 +2976,6 @@ table tbody td {
   margin: 0;
 }
 
-/* LEAP Hackathon Normalized Light Card */
 .leap-hackathon-dedication-card {
   margin-top: 24px;
   background: #FFFFFF;
@@ -3132,7 +3040,3 @@ table tbody td {
     animation: none !important;
   }
 }
-
-
-
-

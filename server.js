@@ -61,7 +61,7 @@ const CITIES_LIST = [
 
 function fallbackParse(text, lang = 'kn') {
   const lower = text.toLowerCase();
-  
+
   let capacity = 8;
   const capMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:ton|tons|ಟನ್|ಟನ್ನು|tonnes|t\b)/i);
   if (capMatch) {
@@ -113,7 +113,6 @@ function fallbackParse(text, lang = 'kn') {
     } catch(e) {}
   }
 
-  // Check specific intent patterns
   if (lower.includes('accept') || lower.includes('book') || lower.includes('oppuko') || lower.includes('ಸ್ವೀಕರಿಸಿ') || lower.includes('confirm') || lower.includes('ಖಚಿತಪಡಿಸು')) {
     intent = 'ACCEPT_MATCH';
     agentic_steps = [

@@ -203,7 +203,7 @@ function setLang(lang) {
     document.querySelectorAll('#viewRoot input, #viewRoot select').forEach(el => {
       if (el.id) inputs[el.id] = el.value;
     });
-    
+
     if (currentView.endsWith('/matcher')) {
       $('viewRoot').innerHTML = TEMPLATES[currentView]();
       initMatcher();
@@ -211,19 +211,18 @@ function setLang(lang) {
     } else {
       showView(currentView, { fromHistory: true });
     }
-    
+
     document.querySelectorAll('#viewRoot input, #viewRoot select').forEach(el => {
       if (el.id && inputs[el.id] !== undefined) el.value = inputs[el.id];
     });
   }
 }
 
-
 function applyStaticI18n() {
   document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
   document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
-  
+
   const ui = `
     <div class="lang-segmented" role="group" aria-label="Language / ಭಾಷೆ">
       <button type="button" class="lang-seg-btn ${LANG==='en'?'active':''}" aria-pressed="${LANG==='en'}" onclick="setLang('en')" title="English">EN</button>
@@ -231,7 +230,7 @@ function applyStaticI18n() {
     </div>`;
   const ub = document.getElementById('ubLang'), al = document.getElementById('authLang'), pl = document.getElementById('profileLang');
   if (ub) ub.innerHTML = ui; if (al) al.innerHTML = ui; if (pl) pl.innerHTML = ui;
-  
+
   if ($('cities')) {
     if (typeof CITIES !== 'undefined') {
       $('cities').innerHTML = Object.keys(CITIES).map(c => `<option value="${c}">${cityName(c)}</option>`).join('');
@@ -249,7 +248,7 @@ const CITIES = {
   Mysuru: [12.2958, 76.6394], Vijayapura: [16.8302, 75.7100]
 };
 const ROAD = 1.25, DIESEL_L_PER_KM = 0.30, DIESEL_PRICE = 92, SPEED = 45, RATE_PER_KM = 28;
-const TOLL_PER_KM = 1.2, DRIVER_BASE = 600, DRIVER_PER_KM = 2; // Demo constants for profit estimate
+const TOLL_PER_KM = 1.2, DRIVER_BASE = 600, DRIVER_PER_KM = 2;
 
 let loads = [
   { id: 1, from: 'APMC Amargol', to: 'Bengaluru', weight: 7.2, type: 'Onion', deadline: '20:00', price: 18500 },
@@ -367,7 +366,6 @@ function renderBell() {
   bl.innerHTML = db.notifications.slice(0, 10).map(n => `<div class="b-item ${n.read ? '' : 'unread'}"><span>${esc(n.text)}</span><span class="b-time">${new Date(n.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span></div>`).join('');
 }
 
-
 function readTruck() {
   const t = { from: key($('tFrom').value), to: key($('tTo').value), cap: +$('tCap').value, avail: +$('tAvail').value, type: $('tType').value, time: $('tTime').value };
   let e = '';
@@ -402,7 +400,7 @@ function statusBadge(l, t) {
   return r.ok ? '<span class="badge b-ok">Eligible</span>' : `<span class="badge b-bad">${r.reason}</span>`;
 }
 function renderLoads() {
-  if (!$('loadRows')) return; // matcher view not mounted
+  if (!$('loadRows')) return;
   const t = readTruckQuiet();
   $('loadCount').textContent = `(${loads.length})`;
   $('loadRows').innerHTML = loads.map(l => {
@@ -523,7 +521,7 @@ function findMatches() {
   const t = readTruck(); if (!t) return;
   const btn = $('findBtn'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Matching loads…';
   setTimeout(() => {
-    if (!$('results')) return; // user navigated away from the matcher
+    if (!$('results')) return;
     lastResults = rankLoads(t, loads.filter(l => !matched.has(l.id)).concat(loads.filter(l => matched.has(l.id))));
     selectedId = lastResults.length ? lastResults[0].l.id : null;
     renderMatches(t, lastResults); renderLoads();
@@ -573,13 +571,12 @@ function initMatcher() {
     else if (c) select(+c.dataset.id);
   };
   ['tFrom', 'tTo', 'tCap', 'tAvail', 'tTime'].forEach(i => $(i).addEventListener('change', renderLoads));
-  renderLoads(); findMatches(); // demo data auto-runs when the matcher opens
+  renderLoads(); findMatches();
 }
 function initPostForm() {
   $('cDrop').innerHTML = cityOptions(); $('cDrop').value = 'Bengaluru';
   $('postBtn').onclick = postLoad;
 }
-
 
 const FB_VER = '10.12.2';
 let FB_CONFIG = null;
@@ -680,7 +677,7 @@ function onPostLoad(l) {
   db.myLoads.push({ id: l.id, from: l.from, to: l.to, weight: l.weight, type: l.type, deadline: l.deadline, price: l.price, status: 'Open', date: todayStr() });
   saveDb(); return true;
 }
-function onAccept(id) { // returns false to veto the acceptance
+function onAccept(id) {
   if (!db || !(session.role === 'transporter' || session.role === 'operator')) { toast('Action not allowed for your role.'); return false; }
   const l = loads.find(x => x.id === id); if (!l) return false;
   if (session.role === 'transporter') {
@@ -712,14 +709,14 @@ function showView(view, opts = {}) {
 }
 window.addEventListener('hashchange', () => { if (session && appOpen) showView(decodeURIComponent(location.hash.replace(/^#\/?/, '')), { fromHistory: true }); });
 
-function buildNav() { // only the current role's items are ever created
+function buildNav() {
   put('navBar', ROLE_ACCESS[session.role].map(v => `<button class="ub-tab" type="button" data-nav="${v}">${t('nav.' + v) || VIEW_LABEL[v] || v}</button>`).join(''));
 }
 function renderView(view) {
   if (chart) { chart.destroy(); chart = null; }
   if (map) { map.remove(); map = null; layer = null; }
   const k = session.role + '/' + view, tpl = TEMPLATES[k];
-  if (!canAccess(view) || !tpl) { $('viewRoot').innerHTML = ''; return; } // defence in depth
+  if (!canAccess(view) || !tpl) { $('viewRoot').innerHTML = ''; return; }
   currentView = view;
   const title = view === 'dashboard' ? (t('role.' + session.role) + ' ' + t('nav.dashboard')) : (t('nav.' + view) || VIEW_LABEL[view] || view);
   $('viewRoot').innerHTML = `<section class="wrap dash view-${view}"><div class="dash-head"><h1>${title}</h1>
@@ -1017,7 +1014,7 @@ function advanceActive() {
   const a = db.active; if (!a) return;
   a.step++;
   if (a.step < STEPS.length - 1) toast(t('filter.status') + ': ' + t('status.' + STEPS[a.step]) || STEPS[a.step]);
-  else { // Delivered: move to history and free the truck
+  else {
     db.trips.push({ id: db.nextTrip++, route: a.from + ' → ' + a.to, date: todayStr(), status: 'Delivered', earn: a.price, km: a.km, fuel: a.fuel, util: a.util });
     const truck = db.trucks.find(t => t.id === a.truckId); 
     if (truck) { truck.status = 'Available'; truck.lastCity = a.to; delete truck.dismissedAlert; delete truck.snoozeUntil; }
@@ -1095,7 +1092,7 @@ function renderHistory() {
   rows = rows.filter(trip => (!st || trip.status === st) && (!from || trip.date >= from) && (!to || trip.date <= to));
   rows.sort((a, b) => sort === 'earnDesc' ? b.earn - a.earn : sort === 'earnAsc' ? a.earn - b.earn : b.date.localeCompare(a.date));
   put('histCount', `(${rows.length})`);
-  
+
   const kmHeader = typeof t === 'function' ? (t('table.km') || 'km') : 'km';
   const kmUnit = kmHeader.split(' ')[0] || 'km';
 
@@ -1134,7 +1131,7 @@ function drawChart() {
         y: { beginAtZero: true, title: { display: true, text: '₹' } },
         y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'km' } } } }
     });
-  } else { // plain-CSS fallback when the Chart.js CDN is unavailable
+  } else {
     cv.parentElement.hidden = true; fbk.hidden = false;
     const me = Math.max(1, ...w.map(x => x.earn)), mk = Math.max(1, ...w.map(x => x.km));
     fbk.innerHTML = w.map((x, i) => `<div class="fb-row"><div>${labels[i]}</div><div class="fb-bars">
@@ -1217,7 +1214,7 @@ function enterApp(city) {
   showOverlay(null); $('userBar').hidden = false;
   $('userName').textContent = session.name; $('roleTag').textContent = t(ROLES[session.role]);
   const h = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
-  showView(h, { fromHistory: true }); // same guard on load/refresh as on every other navigation
+  showView(h, { fromHistory: true });
 }
 function startSession(p) {
   const name = p.name.trim(), id = p.demoId ? 'demo:' + p.demoId : (pending && pending.uid) || 'local:' + name.toLowerCase().replace(/\s+/g, '-');
@@ -1413,7 +1410,6 @@ async function loadFirebase() {
         an.getAnalytics(fbApp);
       }
     } catch (anErr) {
-      // Analytics is optional / non-blocking
     }
 
     return fbm;
@@ -1428,16 +1424,11 @@ function initApp() {
   $('cities').innerHTML = Object.keys(CITIES).map(c => `<option value="${c}">`).join('');
   setAuthMode('login');
   const s = store.get(SESSION_KEY);
-  if (validSession(s)) { session = { name: s.name.trim(), role: s.role, userId: s.userId }; enterApp(); } // restore role + view on refresh
-  else { if (s !== null) store.del(SESSION_KEY); session = null; showOverlay('authOverlay'); } // missing/corrupt/unknown role
+  if (validSession(s)) { session = { name: s.name.trim(), role: s.role, userId: s.userId }; enterApp(); }
+  else { if (s !== null) store.del(SESSION_KEY); session = null; showOverlay('authOverlay'); }
   loadFirebase();
 }
 initApp();
-
-
-
-
-
 
 let amargolMetrics = {
   trucksArrived: 347,
@@ -1755,7 +1746,7 @@ function saarathiHtml() {
             </svg>
           </button>
         </div>
-        
+
         <div class="saarathi-status-text" id="saarathiStatus">
           <span class="status-pulse-dot"></span>
           <span>ಮಾತನಾಡಿ · Tap microphone to speak</span>
@@ -1765,7 +1756,7 @@ function saarathiHtml() {
           <span class="slt-badge">LIVE VOICE:</span>
           <span class="slt-text" id="saarathiLiveTranscript">...</span>
         </div>
-        
+
         <div class="saarathi-examples">
           <div class="ex-badge voice-chip" data-query="ನನ್ನ ಗಾಡಿ ಅಮರಗೋಳಿಗೆ ಬಂದಿದೆ. 8 ಟನ್ ಖಾಲಿ ಇದೆ. ಬೆಂಗಳೂರಿಗೆ ಹೋಗಬೇಕು.">
             <span class="chip-lang-tag kn">ಕನ್ನಡ</span>
@@ -1800,7 +1791,7 @@ function saarathiHtml() {
             <div>ನಮಸ್ಕಾರ ಚಾಲಕರೇ! ನಿಮ್ಮ ವಾಹನ ಅಮರಗೋಳ ಯಾರ್ಡ್‌ನಲ್ಲಿದ್ದರೆ ಅಥವಾ ಯಾವುದೇ ಸ್ಥಳದಲ್ಲಿದ್ದರೂ ಧ್ವನಿಯಲ್ಲಿ ತಿಳಿಸಿ. ಉದಾಹರಣೆಗೆ: <i>"ನನ್ನ ಗಾಡಿ ಅಮರಗೋಳಿಗೆ ಬಂದಿದೆ. 8 ಟನ್ ಖಾಲಿ ಇದೆ. ಬೆಂಗಳೂರಿಗೆ ಹೋಗಬೇಕು."</i></div>
           </div>
         </div>
-        
+
         <form id="saarathiForm" class="saarathi-input-row">
           <input type="text" id="saarathiInput" class="saarathi-input" placeholder="ಧ್ವನಿ ಇಲ್ಲವೇ ಟೈಪ್ ಮಾಡಿ: ನನ್ನ ಗಾಡಿ ಅಮರಗೋಳಿಗೆ ಬಂದಿದೆ, ಬೆಂಗಳೂರಿಗೆ ಲೋಡ್ ಬೇಕು..." autocomplete="off" />
           <button type="submit" class="btn primary saarathi-send-btn" id="saarathiSendBtn">
@@ -2516,7 +2507,6 @@ if ('speechSynthesis' in window) {
   };
 }
 
-
 const futureDateStr = (days) => {
   const d = new Date();
   d.setDate(d.getDate() + days);
@@ -2616,7 +2606,7 @@ function calculatePredictiveBackhaulScore(plannedTrip, load) {
   const forwardOrig = key(plannedTrip.origin) || 'Hubballi';
   const loadFrom = key(load.from) || '';
   const loadTo = key(load.to) || '';
-  
+
   if (loadFrom === forwardDest && (loadTo === forwardOrig || loadTo === 'Hubballi' || loadTo === 'Dharwad')) {
     routeScore = 25;
   } else if (loadFrom === forwardDest) {
@@ -3176,9 +3166,7 @@ function drawPredMap() {
     const belagaviPt = [15.8497, 74.4977];
     const davangerePt = [14.4644, 75.9218];
 
-    // Forward Corridor
     L.polyline([hubballiPt, davangerePt, bengaluruPt], { color: '#10b981', weight: 5 }).addTo(pMap);
-    // Return corridor dash
     L.polyline([bengaluruPt, hubballiPt], { color: '#2563eb', weight: 4, dashArray: '6 8' }).addTo(pMap);
 
     L.circleMarker(hubballiPt, { radius: 9, color: '#0b2a4a', fillColor: '#f2a900', fillOpacity: 1 }).bindTooltip('📍 Origin: APMC Amargol, Hubballi').addTo(pMap);
