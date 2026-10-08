@@ -261,14 +261,9 @@ let loads = [
   { id: 7, from: 'Hubballi', to: 'Bengaluru', weight: 8.0, type: 'Agricultural produce', deadline: '20:30', price: 19000 },
   { id: 8, from: 'Dharwad', to: 'Bengaluru', weight: 4.5, type: 'Textiles', deadline: '21:00', price: 14500 },
   { id: 9, from: 'Gadag', to: 'Bengaluru', weight: 7.0, type: 'Machinery', deadline: '22:00', price: 21000 },
-  { id: 10, from: 'Bengaluru', to: 'Hubballi', weight: 3.5, type: 'Auto parts', deadline: '19:30', price: 12500 },
-  { id: 11, from: 'Shivamogga', to: 'Bengaluru', weight: 5.0, type: 'Areca nut', deadline: '23:59', price: 17500 },
-  { id: 12, from: 'Dharwad', to: 'Bengaluru', weight: 9.0, type: 'Cement bags', deadline: '21:00', price: 22000 },
-  { id: 13, from: 'Hubballi', to: 'Mysuru', weight: 4.0, type: 'Pharma boxes', deadline: '21:30', price: 16000 },
-  { id: 14, from: 'Vijayapura', to: 'Bengaluru', weight: 5.0, type: 'Grapes (cold chain)', deadline: '19:00', price: 19000 },
-  { id: 15, from: 'Gadag', to: 'Hiriyur', weight: 3.0, type: 'Onion', deadline: '22:30', price: 8800 }
+  { id: 10, from: 'Shivamogga', to: 'Bengaluru', weight: 5.0, type: 'Areca nut', deadline: '23:59', price: 17500 }
 ];
-let nextId = 16, selectedId = null, lastResults = [], matched = new Set(), map, layer;
+let nextId = 11, selectedId = null, lastResults = [], matched = new Set(), map, layer;
 const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
 const key = s => {
   if (!s) return null;
